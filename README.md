@@ -231,7 +231,10 @@ probability per capsule, we could view the capsule activations like the mixing p
 mixture of Gaussians and set them to be proportional to the sum of the assignment probabilities
 of a capsule and to sum to 1 over all the capsules in a layer. This increases the test error rate on
 
-![图2]()
+图2显示了EM路由如何调整投票分配以及胶囊装置如何调整投票分配在选票中聚集。直方图显示投票距离的均值（姿态）分布在路由迭代期间每个分类胶囊。在第一次迭代中，投票之间平均分配5最后一层胶囊。因此，所有胶囊的计算结果都会得到接近0.05的选票意思。在第二次迭代中，同意投票的分配概率增加。因此，大多数选票都被分配到检测到的集群，中间是动物和人类排，而其他胶囊只能得到比计算结果更多的零散投票意思。附录中图2的缩小版显示了投票的完整分配每次路由迭代的距离。而不是使用我们的MDL派生的胶囊激活术语来计算单独的激活每个胶囊的概率，我们可以观察胶囊激活，如a中的混合比例高斯混合，并将它们设置为与分配概率的总和成比例
+的胶囊，并且在一层中的所有胶囊上总计为1。这增加了测试错误率
+
+![图2](https://github.com/humor250/matrixcapsules/blob/master/pic2_matrixcapsules.png)
 Figure 2: Histogram of distances of votes to the mean of each of the 5 final capsules after each
 routing iteration. Each distance point is weighted by its assignment probability. All three images
 are selected from the smallNORB test set. The routing procedure correctly routes the votes in the
@@ -239,3 +242,4 @@ truck and the human example. The plane example shows a rare failure case of the 
 plane is confused with a car in the third routing iteration. The histograms are zoomed-in to visualize
 only votes with distances less than 0.05. Fig. B.2 shows the complete histograms for the ”human”
 capsule without clipping the x-axis or fixing the scale of the y-axis.
+图2：投票距离每个胶囊5个胶囊后均值的直方图路由迭代。 每个距离点由其分配概率加权。 所有三个图像是从smallNORB测试集中选择的。 路由程序正确路由中的投票卡车和人的例子。该平面示例显示了一个罕见的模型失败案例飞机在第三次路线迭代中与汽车混淆。直方图被放大以可视化只有距离小于0.05的选票。图B.2显了“人”的完整直方图，胶囊没有剪裁x轴或固定y轴的比例。
