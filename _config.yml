@@ -1,1 +1,5 @@
 theme: jekyll-theme-cayman
+  # GitHUb Pages 默认的 Markdown 引擎（即 GFM）    
+markdown: redcarpet
+  # Latex 支持
+markdown: maruku
