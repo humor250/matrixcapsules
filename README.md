@@ -124,7 +124,7 @@ layer L + 1.
 
 路由程序在每对相邻的胶囊层之间使用。对于卷积胶囊，L+1层的每个胶囊只将反馈发送到L层中其接受域内的胶囊。因此，L层的一个胶囊的每个卷积实例以最大核尺寸X接收来自L+1层的每个胶囊类型的核尺寸反馈。越接近图像边界的实例接收较少的反馈，如角落的实例接收仅仅一个L+1层的一个反馈。
 
-### 4.1 SPREAD LOSS
+### 4.1 SPREAD LOSS传播损失
 In order to make the training less sensitive to the initialization and hyper-parameters of the model,
 we use “spread loss” to directly maximize the gap between the activation of the target class (at) and
 the activation of the other classes. If the activation of a wrong class, ai
@@ -134,3 +134,5 @@ Li = (max(0, m − (at − ai))2, L =Xi6=tLi (3)
 By starting with a small margin of 0.2 and linearly increasing it during training to 0.9, we avoid
 dead capsules in the earlier layers. Spread loss is equivalent to squared Hinge loss with m = 1.
 Guermeur & Monfrini (2011) studies a variant of this loss in the context of multi class SVMs.
+
+为了使训练对模型的初始化和超参数较不敏感，我们使用“传播损失”来直接最大化目标类（at）的激活和其他类的激活之间的差距。如果错误类别ai的激活比距离m更近，那么它受到距离的平方距离的惩罚：Li =（max（0，m - （at-ai））2，L = Xi6 = tLi（3）从0.2的小余量开始，在训练过程中将其线性增加到0.9，我们避免了早期层中的死胶囊。扩散损失相当于m = 1时的平方铰链损失。Guermeur＆Monfrini（ 2011）在多类SVM的背景下研究了这种损失的变体。
