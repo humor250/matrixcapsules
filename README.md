@@ -53,15 +53,15 @@ $$a_j = logistic\biggl(λ\bigl(βa − βu\sum_ir_{ij} −\sum_hcost^h_j\bigr)\b
 5: $∀i ∈ Ω_L$: E-STEP$(µ, σ, a, V , i)$
 return $a, M$
 
-1: **procedure** M-STEP$(a, R, V , j)$ . $\rhd$for one higher-level capsule, j
+1: **procedure** M-STEP$(a, R, V , j)$ . 》for one higher-level capsule, j
 2: $∀i ∈ Ω_L: R_{ij} ← R_{ij} ∗ a_i$
 3: $∀h: µ^h_j ←\frac{\sum_i R_{ij}V^h_{ij}}{\sum_i R_{ij}}$
 4: $∀h: (σ^h_j)^2 ←\frac{\sum_i Rij (V^h_{ij}−µ^h_j)^2}{\sum_i Rij}$
-5: $cost^h ←\bigl(βu + log(σ^h_j)\bigr)\sum_i R_{ij}$
+5: $cost^h ←\bigl(βu + log(σ^h_j)\bigr)\sum_i R_{ij}$
 6: $a_j ← logistic(λ(β_a −\sum_hcost^h))$
 
-1: **procedure** E-STEP(µ, σ, a, V , i) . $\rhd$for one lower-level capsule, i
-2: $∀j ∈ Ω_{L+1}: p_j ← \frac{1}{\sqrt{\prod^H_h2π(σ^h_j)2}}exp \bigl(−\sum^H_h\frac{(V^h_{ij}−µ^h_j)2}{2(σ^h_j)2}\bigr)$
+1: **procedure** E-STEP(µ, σ, a, V , i) . 》for one lower-level capsule, i
+2: $∀j ∈ Ω_{L+1}: p_j ← \frac{1}{\sqrt{\prod^H_h2π(σ^h_j)2}}exp\bigl(−\sum^H_h\frac{(V^h_{ij}−µ^h_j)2}{2(σ^h_j)2}\bigr)$
 3: $∀j ∈ Ω_{L+1}: R_{ij} ← \frac{a_j p_j}{\sum_{k∈Ω_{L+1}}a_kp_k}$
 
 
