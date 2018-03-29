@@ -216,4 +216,26 @@ CNN基线在smallNORB上达到5.2％的测试错误率，并具有4.2M参数。�
 （和Ciresfort等人（2011）的9倍因子）。 A = 64，B = 8，C =的小胶囊网络
 D = 16，只有68K可训练参数达到了2.2％的测试错误率，这也击败了之前的测试错误率
 最先进的。
-图2显示了EM routi
+
+Fig. 2 shows how EM routing adjusts the vote assignments and the capsule means to find the tight
+clusters in the votes. The histograms show the distribution of vote distances to the mean (pose) of
+each class capsule during routing iterations. At the first iteration, votes are distributed equally between
+5 final layer capsules. Therefore, all capsules receive votes closer than 0.05 to their calculated
+mean. In the second iteration, the assignment probability for agreeing votes increases. Therefore,
+most of the votes are assigned to the detected clusters, the animal and human class in the middle
+row, and the other capsules only receive scattered votes which are further than 0.05 from the calculated
+mean. The zoomed-out version of Fig. 2 in the Appendix shows the full distribution of vote
+distances at each routing iteration.
+Instead of using our MDL-derived capsule activation term which computes a separate activation
+probability per capsule, we could view the capsule activations like the mixing proportions in a
+mixture of Gaussians and set them to be proportional to the sum of the assignment probabilities
+of a capsule and to sum to 1 over all the capsules in a layer. This increases the test error rate on
+
+![图2]()
+Figure 2: Histogram of distances of votes to the mean of each of the 5 final capsules after each
+routing iteration. Each distance point is weighted by its assignment probability. All three images
+are selected from the smallNORB test set. The routing procedure correctly routes the votes in the
+truck and the human example. The plane example shows a rare failure case of the model where the
+plane is confused with a car in the third routing iteration. The histograms are zoomed-in to visualize
+only votes with distances less than 0.05. Fig. B.2 shows the complete histograms for the ”human”
+capsule without clipping the x-axis or fixing the scale of the y-axis.
