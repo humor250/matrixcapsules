@@ -242,4 +242,259 @@ truck and the human example. The plane example shows a rare failure case of the 
 plane is confused with a car in the third routing iteration. The histograms are zoomed-in to visualize
 only votes with distances less than 0.05. Fig. B.2 shows the complete histograms for the ”human”
 capsule without clipping the x-axis or fixing the scale of the y-axis.
+
 图2：投票距离每个胶囊5个胶囊后均值的直方图路由迭代。 每个距离点由其分配概率加权。 所有三个图像是从smallNORB测试集中选择的。 路由程序正确路由中的投票卡车和人的例子。该平面示例显示了一个罕见的模型失败案例飞机在第三次路线迭代中与汽车混淆。直方图被放大以可视化只有距离小于0.05的选票。图B.2显了“人”的完整直方图，胶囊没有剪裁x轴或固定y轴的比例。
+
+Table 2: A comparison of the smallNORB test error rate of the baseline CNN and the capsules model
+on novel viewpoints when both models are matched on error rate for familiar viewpoints.
+
+表2：在熟悉视角下两模型误差率相同时，新视角下基线CNN和胶囊模型的smalNORB测试错误率的比较
+
+
+smallNORB to 4.5%. Tab. 1 summarizes the effects of the number of routing iterations, the type of
+loss, and the use of matrices rather than vectors for the poses.
+The same capsules architecture as Fig. 1 achieves 0.44% test error rate on MNIST. If the number
+of channels in the first hidden layer is increased to 256, it achieves 11.9% test error rate on Cifar10
+(Krizhevsky & Hinton (2009)).
+
+smallNORB降至4.5％。 标签.1统计了路由迭代次数的影响，即类型损失，以及使用矩阵而不是向量来表示姿势。与图1相同的胶囊架构在MNIST上达到了0.44％的测试错误率。 如果在第一隐层的通道数量增加到256个，在Cifar10上实现了11.9％的测试错误率（Krizhevsky＆Hinton（2009））。
+
+5.1 GENERALIZATION TO NOVEL VIEWPOINTS
+A more severe test of generalization is to use a limited range of viewpoints for training and to test on
+a much wider range. We trained both our convolutional baseline and our capsule model on one-third
+of the training data containing azimuths of (300, 320, 340, 0, 20, 40) and tested on the two-thirds of
+the test data that contained azimuths from 60 to 280. In a separate experiment, we trained on the 3
+smaller elevations and tested on the 6 larger elevations.
+It is hard to decide if the capsules model is better at generalizing to novel viewpoints because it
+achieves better test accuracy on all viewpoints. To eliminate this confounding factor, we stopped
+training the capsule model when its performance matched the baseline CNN on the third of the
+test set that used the training viewpoints. Then, we compared these matched models on the twothirds
+of the test set with novel viewpoints. Results in Tab. 2 show that compared with the baseline
+CNN capsules with matched performance on familiar viewpoints reduce the test error rate on novel
+viewpoints by about 30% for both novel azimuths and novel elevations.
+
+5.1新视角概述
+更严格的总的测试是使用有限范围的观点进行训练和测试范围更广泛。我们对卷积基线和胶囊模型进行了三分之一的训练的训练数据包含方位角（300,320,340,0,20,40），并在三分之二的包含方位角从60到280的测试数据。在另一个实验中，我们对3进行了训练较小的海拔高度和6个较大的海拔高度进行测试。很难决定胶囊模型是否更好地推广到新颖的观点，因为它在所有视点上实现更好的测试准确性。为了消除这个混杂因素，我们停了下来训练胶囊模型时，其性能与基线CNN的三分之一相符测试集使用了培训观点。然后，我们将这些匹配的模型在两三位进行比较具有新颖观点的测试集。结果在Tab.2显示与基线相比,在熟悉的视点上具有匹配性能的CNN胶囊，在新视角，对于新方位角和新高程，减少了约为30％测试错误率。
+
+6 ADVERSARIAL ROBUSTNESS
+There is growing interest in the vulnerability of neural networks to adversarial examples; inputs
+that have been slightly changed by an attacker to trick a neural net classifier into making the wrong
+classification. These inputs can be created in a variety of ways, but straightforward strategies such as
+FGSM (Goodfellow et al. (2014)) have been shown to drastically decrease accuracy in convolutional
+neural networks on image classification tasks. We compare our capsule model and a traditional
+convolutional model on their ability to withstand such attacks.
+FGSM computes the gradient of the loss w.r.t. each pixel intensity and then changes the pixel
+intensity by a fixed amount  in the direction that increases the loss. So the changes only depend on
+the sign of the gradient at each pixel. This can be extended to a targeted attack by updating the input
+to maximize the classification probability of a particular wrong class. We generated adversarial
+attacks using FGSM because it has only one hyper-parameter and it is easy to compare models
+that have very different gradient magnitudes. To test the robustness of our model, we generated
+adversarial images from the test set using a fully trained model. We then reported the accuracy of
+the model on these images.
+We found that our model is significantly less vulnerable to both general and targeted FGSM adversarial
+attacks; a small  can be used to reduce a convolutional model’s accuracy much more than an
+equivalent  can on the capsule model (Fig. 3). It should also be noted that the capsule model’s accuracy
+after the untargeted attack never drops below chance (20%) whereas the convolutional model’s
+accuracy is reduced to significantly below chance with an  as small as 0.2.
+We also tested our model on the slightly more sophisticated adversarial attack of the Basic Iterative
+Method (Kurakin et al. (2016)), which is simply the aforementioned attack except it takes multiple
+smaller steps when creating the adversarial image. Here too we find that our model is much more
+robust to the attack than the traditional convolutional model.
+
+6 抵御的鲁棒性
+人们越来越感兴趣的是神经网络对敌对的例子。输入
+攻击者已经稍微改变了这一点，以欺骗神经网络分类器制造错误
+分类。这些输入可以通过各种方式创建，但直接的策略如
+FGSM（Goodfellow et al。（2014））已经显示大大降低了卷积的准确性
+神经网络对图像分类任务。我们比较我们的胶囊模型和传统模型
+卷积模型对其抵御这种攻击的能力。
+FGSM计算损失w.r.t的梯度。每个像素的亮度然后改变像素
+强度按固定量计算？在增加损失的方向上。所以这些变化只依赖于
+每个像素处渐变的符号。这可以通过更新输入扩展到有针对性的攻击
+以最大化特定错误类别的分类概率。我们产生了敌对情绪
+使用FGSM的攻击，因为它只有一个超参数，并且很容易比较模型
+它们具有非常不同的梯度大小。为了测试我们的模型的鲁棒性，我们生成了
+使用完全训练的模型从测试集中获得敌对图像。然后我们报告了准确性
+这些图像上的模型。
+我们发现我们的模型对于普通和有针对性的FGSM敌手都不那么脆弱
+攻击;一个小的 ？可以用来减少卷积模型的精度远远超过一个
+相当于？可以在胶囊模型上（图3）。还应该指出，胶囊模型的准确性
+在非目标攻击之后永远不会低于机会（20％）而卷积模型
+准确性被降低到显着低于一个？小到0.2。
+我们还测试了我们的基础迭代稍微复杂的敌对攻击模型
+方法（Kurakin et al。（2016）），这只是上述攻击，除了它需要多次
+创建敌对图片时步幅较小。我们也发现我们的模型更多
+比传统的卷积模型更能抵御攻击。
+
+![图3]()
+
+Figure 3: Accuracy against  after an adversarial attack (left) and Success Rate after a targeted
+adversarial attack (right). The targeted attack results were evaluated by averaging the success rate
+after the attack for each of the 5 possible classes.
+图3：对抗攻击（左）后的$\epsilon$准确性和目标攻击（右）后的成功率。目标攻击结果，是对5个可能种类的每一个的攻击后，通过平均成功率进行评估。
+
+It has been shown that some robustness to adversarial attacks in models can be due to simple numerical
+instability in the calculation of the gradient Brendel & Bethge (2017). To ensure that this
+was not the sole cause of our model’s robustness, we calculated the percentage of zero values in the
+gradient with respect to the image in the capsule model and found it to be smaller than that of the
+CNN. Furthermore, the capsule gradients, although smaller that those of the CNN, are only smaller
+by 2 orders of magnitude, as opposed to 16 orders of magnitude seen in Brendel & Bethge (2017)’s
+work.
+Finally we tested our model’s robustness to black box attacks by generating adversarial examples
+with a CNN and testing them on both our capsule model and a different CNN. We found that the
+capsule model did not perform noticeably better at this task than the CNN.
+
+已经表明，模型中对抗攻击的一些鲁棒性可能归因于简单的数值
+计算梯度Brendel＆Bethge（2017）的不稳定性。为了确保这一点
+并不是我们模型稳健性的唯一原因，我们计算了零值的百分比
+相对于胶囊模型中的图像的梯度，并且发现其小于
+CNN。此外，胶囊梯度虽然小于CNN，但只有较小的梯度
+增加2个数量级，而Brendel＆Bethge（2017）的数据则为16个数量级
+工作。
+最后，我们通过生成敌对的例子来测试我们的模型对黑匣子攻击的鲁棒性
+与CNN并在我们的胶囊模型和不同的CNN上测试它们。我们发现了
+胶囊模型在这项任务上的表现并不比CNN好得多。
+
+7 RELATED WORK
+Among the multiple recent attempts at improving the ability of neural networks to deal with viewpoint
+variations, there are two main streams. One stream attempts to achieve viewpoint invariance
+and the other aims for viewpoint equivariance. The work presented by Jaderberg et al. (2015)), Spatial
+Transformer Networks, seeks viewpoint invariance by changing the sampling of CNNs according
+to a selection of affine transformations. De Brabandere et al. (2016) extends spatial transformer
+networks where the filters are adapted during inference depending on the input. They generate different
+filters for each locality in the feature map rather than applying the same transformation to all
+filters. Their approach is a step toward input covariance detection from traditional pattern matching
+frameworks like standard CNNs (LeCun et al. (1990)). Dai et al. (2017) improves upon spatial
+transformer networks by generalizing the sampling method of filters. Our work differs substantially
+in that a unit is not activated based on the matching score with a filter (either fixed or dynamically
+changing during inference). In our case, a capsule is activated only if the transformed poses coming
+from the layer below match each other. This is a more effective way to capture covariance and leads
+to models with many fewer parameters that generalize better.
+The success of CNNs has motivated many researchers to extend the translational equivariance built
+in to CNNs to include rotational equivariance (Cohen & Welling (2016), Dieleman et al. (2016),
+Oyallon & Mallat (2015)). The recent approach in Harmonic Networks (Worrall et al. (2017))
+achieves rotation equivariant feature maps by using circular harmonic filters and returning both the
+maximal response and orientation using complex numbers. This shares the basic representational
+idea of capsules: By assuming that there is only one instance of the entity at a location, we can
+use several different numbers to represent its properties. They use a fixed number of streams of
+rotation orders. By enforcing the equality of the sum of rotation orders along any path, they achieve
+patch-wise rotation equivariance. This approach is more parameter-efficient than data augmentation
+approaches, duplicating feature maps, or duplicating filters (Fasel & Gatica-Perez (2006), Laptev
+et al. (2016)). Our approach encodes general viewpoint equivariance rather than only affine 2D
+rotations. Symmetry networks (Gens & Domingos (2014)) use iterative Lucas-Kanade optimization
+to find poses that are supported by the most low-level features. Their key weakness is that the
+iterative algorithm always starts at the same pose, rather than the mean of the bottom-up votes.
+
+Lenc & Vedaldi (2016) proposes a feature detection mechanism (DetNet) that is equivariant to affine
+transformations. DetNet is designed to detect the same points in the image under different viewpoint
+variations. This effort is orthogonal to our work but DetNet might be a good way to implement the
+de-rendering first-stage that activates the layer of primary capsules.
+Our routing algorithm can be seen as an attention mechanism. In this view, it is related to the work of
+Gregor et al. (2015), where they improved the decoder performance in a generative model by using
+Gaussian kernels to attend to different parts of the feature map generated by the encoder. Vaswani
+et al. (2017) uses a softmax attention mechanism to match parts of the query sequence to parts of
+the input sequence for the translation task and when generating an encoding for the query. They
+show improvement upon previous translation efforts using recurrent architectures. Our algorithm
+has attention in the opposite direction. The competition is not between the lower-level capsules that
+a higher-level capsule might attend to. It is between the higher-level capsules that a lower-level
+capsule might send its vote to.
+
+7相关工作
+最近多次尝试提高神经网络处理视点的能力
+变化，有两个主要流。一个流尝试实现视点不变性
+另一个目标是视点等同性。 Jaderberg等人提出的工作。 （2015）），Spatial
+变压器网络通过改变CNN的采样来寻求视点不变性
+到选择仿射变换。 De Brabandere等人。 （2016年）扩展了空间变压器
+根据输入推理过滤器的网络。他们产生不同的
+为特征映射中的每个位置过滤，而不是对所有位置应用相同的转换
+过滤器。他们的方法是从传统模式匹配向输入协方差检测迈出的一步
+像标准CNN这样的框架（LeCun et al。（1990））。 Dai et al。 （2017年）改善空间
+变压器网络通过推广滤波器的抽样方法。我们的工作差别很大
+因为根据过滤器的匹配分数（固定或动态），单位不会被激活
+在推断期间改变）。在我们的例子中，只有在转换后的姿势到来时才会激活胶囊
+从下面的图层互相匹配。这是捕获协方差和线索的更有效方法
+到具有更少泛化参数的模型更好。
+CNN的成功促使许多研究人员扩展了所建立的平移等价性
+包括旋转等变量（Cohen＆Welling（2016），Dieleman等（2016），
+Oyallon＆Mallat（2015））。 Harmonic Networks最近的做法（Worrall et al。（2017））
+通过使用圆谐波滤波器实现旋转等变特征映射并返回两者
+最大响应和使用复数的方向。这共享基本代表性
+胶囊的想法：通过假设一个位置只有一个实体实例，我们可以
+使用几个不同的数字来表示它的属性。他们使用固定数量的流
+轮换订单。通过沿着任何路径执行轮换顺序总和的等式，它们可以实现
+补丁式旋转等变性。这种方法比数据增强更具参数效率
+方法，复制特征地图或复制过滤器（Fasel＆Gatica-Perez（2006），Laptev
+等人。 （2016））。我们的方法编码一般视点等变量而不是仅仿射二维
+旋转。对称网络（Gens＆Domingos（2014））使用迭代Lucas-Kanade优化
+找到最低级别功能支持的姿势。他们的关键弱点是，
+迭代算法始终始于相同的姿势，而不是自下而上的投票的意思。
+
+Lenc和Vedaldi（2016）提出了一个与仿射等同的特征检测机制（DetNet）
+TRANSF
+
+
+7.1 PREVIOUS WORK ON CAPSULES
+Hinton et al. (2011) used a transformation matrix in a transforming autoencoder that learned to
+transform a stereo pair of images into a stereo pair from a slightly different viewpoint. However,
+that system requires the transformation matrix to be supplied externally. More recently, routing-byagreement
+was shown to be effective for segmenting highly overlapping digits (Sabour et al. (2017)),
+but that system has several deficiencies that we have overcome in this paper:
+1. It uses the length of the pose vector to represent the probability that the entity represented by
+a capsule is present. To keep the length less than 1, requires an unprincipled non-linearity
+and this prevents the existence of any sensible objective function that is minimized by the
+iterative routing procedure.
+2. It uses the cosine of the angle between two pose vectors to measure their agreement. Unlike
+the negative log variance of a Gaussian cluster, the cosine saturates at 1, which makes it
+insensitive to the difference between a quite good agreement and a very good agreement.
+3. It uses a vector of length n rather than a matrix with n elements to represent a pose, so its
+transformation matrices have n
+2 parameters rather than just n.
+
+7.1以前的胶囊工作
+Hinton等人（2011）在学习过的变换自编码器中使用了变换矩阵
+将一对立体图像从略微不同的视点转换为立体对。然而，
+该系统需要从外部提供变换矩阵。最近，路由 - 通过协议
+被证明对分割高度重叠的数字是有效的（Sabour等（2017）），
+但是这个系统有几个缺陷，我们在本文中已经解决了这个问题：
+它使用姿态向量的长度来表示由实体表示的实体的概率
+存在胶囊。要保持长度小于1，需要一个无原则的非线性
+并且这可以防止任何由此最小化的明智的目标函数的存在
+迭代路由过程。
+它使用两个姿态矢量之间角度的余弦来衡量它们的一致性。不像
+高斯簇的负对数方差，余弦在1处饱和，这使得它
+对相当好的协议和非常好的协议之间的区别不敏感。
+它使用一个长度为n的矢量，而不是一个有n个元素的矩阵来表示一个姿势，所以它是
+变换矩阵有n个
+2个参数而不仅仅是n。
+
+8 CONCLUSION
+Building on the work of Sabour et al. (2017), we have proposed a new type of capsule system in
+which each capsule has a logistic unit to represent the presence of an entity and a 4x4 pose matrix
+to represent the pose of that entity. We also introduced a new iterative routing procedure between
+capsule layers, based on the EM algorithm, which allows the output of each lower-level capsule
+to be routed to a capsule in the layer above in such a way that active capsules receive a cluster of
+similar pose votes. This new system achieves significantly better accuracy on the smallNORB data
+set than the state-of-the-art CNN, reducing the number of errors by 45%. We have also shown it to
+be significantly more robust to white box adversarial attacks than a baseline CNN.
+SmallNORB is an ideal data-set for developing new shape-recognition models precisely because it
+lacks many of the additional features of images in the wild. Now that our capsules model works
+well on NORB, we plan to implement an efficient version to test much larger models on much larger
+data-sets such as ImageNet.
+ACKNOWLEDGMENTS Thanks to Robert Gens, Eric Langlois, Taco Cohen and anonymous
+commentators for helpful discussions and to everyone who made TensorFlow.
+
+8结论
+以Sabour等人的工作为基础。 （2017年），我们提出了一种新型胶囊系统
+其中每个胶囊具有用于表示实体和4×4姿态矩阵的存在的逻辑单元
+以表示该实体的姿态。我们还介绍了一种新的迭代路由程序
+基于EM算法的胶囊层，其允许每个较低级别胶囊的输出
+被路由到上面的层中的胶囊，使得活性胶囊接收一簇
+类似的姿势投票。这个新系统在smallNORB数据上实现了更高的精度
+比最先进的CNN设置，减少了45％的错误数量。我们也展示了它
+对于白盒对抗性攻击比基线CNN更强大。
+SmallNORB是开发新型形状识别模型的理想数据集，因为它恰恰是
+缺乏野外图像的许多附加功能。现在我们的胶囊模型起作用了
+在NORB上，我们计划实施一个高效的版本来测试更大的模型
+数据集如ImageNet。
+致谢感谢Robert Gens，Eric Langlois，Taco Cohen和匿名
+有帮助的讨论评论员和每个制作TensorFlow的人。
