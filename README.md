@@ -135,4 +135,4 @@ By starting with a small margin of 0.2 and linearly increasing it during trainin
 dead capsules in the earlier layers. Spread loss is equivalent to squared Hinge loss with m = 1.
 Guermeur & Monfrini (2011) studies a variant of this loss in the context of multi class SVMs.
 
-为了降低训练对模型的初始参数和超参数敏感性，我们使用“传播损失”来直接最大化目标类（at）激活和其他类激活之间的差距。如果错误类别ai的激活比余量m更近，那么它受到距离平方的处罚：$$L_i = (max(0, m − (a_t − a_i))^2, L =\sum_{i \neq t}L_i (3)$$ 从0.2的小余量开始，在训练过程中将其线性增加到0.9，我们避免了早期层中的死胶囊。扩散损失相当于m = 1时的平方Hinge损失。Guermeur＆Monfrini（ 2011）研究了在多类SVM的背景下这种损失的变化。
+为了降低训练对模型的初始参数和超参数敏感性，我们使用“传播损失”来直接最大化目标类（at）激活和其他类激活之间的差距。如果错误类别ai的激活比余量m更近，那么它的罚额是距离平方：$$L_i = (max(0, m − (a_t − a_i))^2, L =\sum_{i \neq t}L_i (3)$$ 从0.2的小余量开始，在训练过程中将其线性增加到0.9，我们避免了早期层中的死胶囊。扩散损失相当于m = 1时的平方Hinge损失。Guermeur＆Monfrini（ 2011）研究了在多类SVM的背景下这种损失的变化。
