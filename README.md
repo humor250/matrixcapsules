@@ -1,16 +1,16 @@
-        用EM路由实现的矩阵胶囊（中文译本）
+## 用EM路由实现的矩阵胶囊（中文译本）
         
 Geoffrey Hinton, Sara Sabour, Nicholas Frosst{geoffhinton, sasabour, frosst}@google.com
 谷歌大脑   多伦多, 加拿大
 
-      摘要
-一个胶囊是一组神经元，其输出表征同一实体的不同属性。一个胶囊网络的每层含有多个胶囊。我们描述一种胶囊版本，其中每个胶囊有一个逻辑单元来表明一个实体的存在性和一个4x4矩阵，这个矩阵能够习得表征那个实体与观察者（姿态）的关系。每层的一个胶囊对上层的多个不同胶囊构成的姿态矩阵进行投票，方法是它的姿态矩阵与可训练的视点不变的能够习得表征局部-整体关系的变换矩阵相乘。每张选票通过一个分配的系数进行加权。每张图片采用期望-最大化算法（Expectation-Maximization algorithm）对这些系数进行迭代更新，这样，每个胶囊的输出路由到接受一组相似选票的上层的一个胶囊。变换矩阵的训练不同，是在每对相邻胶囊层之间采用展开式迭代的EM算法（unrolled iterations of EM）进行反向传播。通过smallNORB评测, 与最好记录相比，胶囊减少了45%的测试错误率。同时显示出比标准的CNN对白盒对抗攻击具有超强的抵抗力。
+### 摘要
+一个胶囊是一组神经元，其输出表征同一实体的不同属性。一个胶囊网络的每层含有多个胶囊。我们描述一种胶囊版本，其中每个胶囊有一个逻辑单元来表明一个实体的存在性和一个4x4矩阵，这个矩阵能够习得表征那个实体与观察者（姿态）的关系。每层的一个胶囊对上层的多个不同胶囊构成的姿态矩阵进行投票，方法是它的姿态矩阵与可训练的视点不变的能够习得表征局部-整体关系的变换矩阵相乘。每张选票通过一个分配的系数进行加权。每张图片采用Expectation-Maximization algorithm对这些系数进行迭代更新，这样，每个胶囊的输出路由到接受一组相似选票的上层的一个胶囊。变换矩阵的训练不同，是在每对相邻胶囊层之间采用展开式迭代的EM算法（unrolled iterations of EM）进行反向传播。通过smallNORB评测, 与最好记录相比，胶囊减少了45%的测试错误率。同时显示出比标准的CNN对白盒对抗攻击具有超强的抵抗力。
 
 ------
-1 简介
+### 1 简介
 卷积神经网络是构建于这样的简单事实，即一个视觉系统要对图片中的所以位置采用同样的知识。这是通过绑定特征探测器的权重，以便在一处习得的特征在别处有效。卷积胶囊网络扩展位置知识共享到包括局部-整体关系的知识，这种关系通过一个熟悉的图形表示。视点变化对像素强度有复杂效果，但对表征对象或对象局部和观察者之间的关系的姿态矩阵有简单线性效果。胶囊网络意图利用好这一底层线性关系，处理视点变化和提升分割决定力。胶囊网络利用高维度巧合过滤：通过寻找给姿态矩阵投票的协议，探测出一个熟悉对象。这些票来自于已经探测出的对象局部。一个对象局部产生一票，方法是它的姿态矩阵乘以一个习得的变换矩阵，其表征视点不变的局部和整体关系。随着视点变化，局部和整体的姿态矩阵会以一种协调方式改变，这样，来自不同局部的投票间的任何协议都会保持。在一堆不相关选票中寻找高维选票的紧致集群是一种解决局部整体归属问题的办法。这是不同寻常的，因为我们不能用对低维度翻译空间网格化以利卷积那样，对高维度体态空间网格化。对于这个挑战，我们采用称为协议路由“routingby-agreement”的快速迭代处理方法，即对一个局部属于一个整体的概率进行更新，这是基于来自于那个局部的选票接近于来自属于那个整体的其它局部的选票。这是一个强大的分割原则，其允许采用熟悉的图形知识派生分割，而不是仅仅使用如颜色或速度的近似值或一致性等低级方法。胶囊网络和标准神经网络的一个重要区别在于，一个胶囊的激活是基于一种在多个输入体态预测之间的比较，而标准神经网络是基于在一个单一输入活动向量和一个习得的权重向量的比较。
 
-2 HOW CAPSULES WORK胶囊网络如何工作
+### 2 HOW CAPSULES WORK胶囊网络如何工作
 Neural nets typically use simple non-linearities in which a non-linear function is applied to the
 scalar output of a linear filter. 
 典型地，神经网络应用简单的非线性，即应用一个非线性函数进行一个线性过滤器的标量输出。
@@ -51,7 +51,7 @@ introduction to routing-by-agreement and describe in detail how it relates to th
 fitting a mixture of Gaussians.
 在附录1，我们给协议路由（routing-by-agreement）一个中性的直观介绍，并详细描述它与拟合高斯混合的EM算法之间的关系。
 
-3 USING EM FOR ROUTING-BY-AGREEMENT用EM实现路由协议
+### 3 USING EM FOR ROUTING-BY-AGREEMENT用EM实现路由协议
 Let us suppose that we have already decided on the poses and activation probabilities of all the
 capsules in a layer and we now want to decide which capsules to activate in the layer above and
 how to assign each active lower-level capsule to one active higher-level capsule. 
@@ -163,7 +163,7 @@ return $a, M$
 3: $∀j ∈ Ω_{L+1}: R_{ij} ← \frac{a_j p_j}{\sum_{k∈Ω_{L+1}}a_kp_k}$
 
 
-4 THE CAPSULES ARCHITECTURE胶囊网络架构
+### 4 THE CAPSULES ARCHITECTURE胶囊网络架构
 The general architecture of our model is shown in Fig. 1. 
 模型总的架构如图1所示。
 The model starts with a 5x5 convolutional
@@ -176,7 +176,6 @@ The 4x4 pose of each of the B=32 primary
 capsule types is a learned linear transformation of the output of all the lower-layer ReLUs centered at that location. 
 B=32主胶囊类型的每个胶囊的4x4姿态是一个习得的所有的低层的在那个中心weiReLU的线性转换。
 
-![此处输入图片的描述][1]
 图 1：带有一个 ReLU 卷积层，后面跟着一个主卷积 capsule 层和两个其它卷积 capsule 层。
 
 The activations of the primary capsules are produced by applying the sigmoid function
@@ -200,3 +199,14 @@ L. Therefore each convolutional instance of a capsule in layer L receives at mos
 size feedback from each capsule type in layer L + 1. The instances closer to the border of the
 image receive fewer feedbacks with corner ones receiving only one feedback per capsule type in
 layer L + 1.
+
+### 4.1 SPREAD LOSS
+In order to make the training less sensitive to the initialization and hyper-parameters of the model,
+we use “spread loss” to directly maximize the gap between the activation of the target class (at) and
+the activation of the other classes. If the activation of a wrong class, ai
+, is closer than the margin,
+m, to at then it is penalized by the squared distance to the margin:
+Li = (max(0, m − (at − ai))2, L =Xi6=tLi (3)
+By starting with a small margin of 0.2 and linearly increasing it during training to 0.9, we avoid
+dead capsules in the earlier layers. Spread loss is equivalent to squared Hinge loss with m = 1.
+Guermeur & Monfrini (2011) studies a variant of this loss in the context of multi class SVMs.
