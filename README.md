@@ -165,7 +165,55 @@ CNN of Cires¸an et al. (2011) with extra input images & deformations 2.56%
 Our Best model (third row), with multiple crops during testing 1.4%
 
 表1：我们的胶囊架构的不同组件对smallNORB的影响。
-
-########路由迭代姿态结构损失坐标添加测试错误率，！！！！放张表！！！！
+！[表一]https://github.com/humor250/matrixcapsules/blob/master/table1_matrixcapsules.png
 
 We downsample smallNORB to 48 × 48 pixels and normalize each image to have zero mean and
+unit variance. During training, we randomly crop 32 × 32 patches and add random brightness and
+contrast to the cropped images. During test, we crop a 32 × 32 patch from the center of the image
+and achieve 1.8% test error on smallNORB. If we average the class activations over multiple crops
+at test time we achieve 1.4%. The best reported result on smallNORB without using meta data is
+2.56% (Cires¸an et al. (2011)). To achieve this, they added two additional stereo pairs of input images
+that are created by using an on-center off-surround filter and an off-center on-surround filter. They
+also applied affine distortions to the images. Our work also beats the Sabour et al. (2017) capsule
+work which achieves 2.7% on smallNORB. We also tested our model on NORB which is a jittered
+version of smallNORB with added background and we achieved a 2.6% error rate which is on par
+with the state-of-the-art of 2.7% (Ciresan et al. (2012)).
+As the baseline for our experiments on generalization to novel viewpoints we train a CNN which
+has two convolutional layers with 32 and 64 channels respectively. Both layers have a kernel size
+of 5 and a stride of 1 with a 2 × 2 max pooling. The third layer is a 1024 unit fully connected
+layer with dropout and connects to the 5-way softmax output layer. All hidden units use the ReLU
+non-linearity. We use the same image preparation for the CNN baseline as described above for the
+capsule network. Our baseline CNN was the result of an extensive hyperparameter search over filter
+sizes, numbers of channels and learning rates.
+The CNN baseline achieves 5.2% test error rate on smallNORB and has 4.2M parameters. We
+deduce that the Cires¸an et al. (2011) network has 2.7M parameters. By using small matrix multiplies,
+we reduced the number of parameters by a factor of 15 to 310K compared with our baseline CNN
+(and a factor of 9 w.r.t Cires¸an et al. (2011)). A smaller capsule network of A = 64, B = 8, C =
+D = 16 with only 68K trainable parameters achieves 2.2% test error rate which also beats the prior
+state-of-the-art.
+
+我们将smallNORB缩减为48×48像素，并将每幅图像归一化为零均值和
+单位差异。在训练过程中，我们随机裁剪32×32个补丁并添加随机亮度和
+与裁剪图像形成对比。在测试过程中，我们从图像中心剪下32×32的补丁
+并在smallNORB上实现1.8％的测试错误。如果我们平均对多种作物进行类别激活
+在测试时我们达到了1.4％。在没有使用元数据的情况下，smallNORB上最好的报告结果是
+2.56％（Ciresfort等（2011））。为了实现这一点，他们添加了两个附加的立体声输入图像对
+这是通过使用中心偏离环绕滤波器和偏心环绕滤波器创建的。他们
+也对图像应用仿射失真。我们的工作还击败了Sabour等人。 （2017）胶囊
+在smallNORB上达到2.7％的工作。我们还在NORB上测试了我们的模型，这是一个抖动
+版本的smallNORB增加了背景，我们实现了2.6％的错误率
+最新的2.7％（Ciresan et al。（2012））。
+作为我们对新颖观点进行概括的实验的基准，我们培训了一个CNN
+有两个分别具有32和64通道的卷积层。两个图层都有一个内核大小
+为5，步幅为1，最大为2×2。第三层是完全连接的1024个单元
+丢失层并连接到5路softmax输出层。所有隐藏的单位使用ReLU
+非线性。我们对CNN基线使用与上述相同的图像准备
+胶囊网络。我们的基线CNN是广泛的超参数搜索过滤器的结果
+规模，渠道数量和学习率。
+CNN基线在smallNORB上达到5.2％的测试错误率，并具有4.2M参数。我们
+推断Ciresfort等人。 （2011）网络拥有2.7M参数。通过使用小矩阵乘法，
+与基准CNN相比，我们将参数数量减少了15到310K
+（和Ciresfort等人（2011）的9倍因子）。 A = 64，B = 8，C =的小胶囊网络
+D = 16，只有68K可训练参数达到了2.2％的测试错误率，这也击败了之前的测试错误率
+最先进的。
+图2显示了EM routi
