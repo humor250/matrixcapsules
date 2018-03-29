@@ -88,41 +88,9 @@ B=32主胶囊类型的每个胶囊的4x4姿态是一个习得的所有的低层�
 
 图1：胶囊网络架构有一个ReLU卷积层，后面跟一个主卷积胶囊层和两个其它卷积胶囊层。
 
-The activations of the primary capsules are produced by applying the sigmoid function
-to the weighted sums of the same set of lower-layer ReLUs.
-主胶囊的激活是利用sigmoid函数处理同组的低层ReLU的权重总和产生。
+主胶囊的激活是利用sigmoid函数处理同组的低层ReLU的权重总和产生。主胶囊之后是两个3x3卷积胶囊层（K = 3），每个都有32个胶囊类型（C = D = 32），步幅分别为2和1。最后一层卷积胶囊连接到每个输出级都有一个胶囊的最终胶囊层。将最后一个卷积胶囊层连接到最后一层时，我们不想丢弃远离有关卷积胶囊位置的信息，我们也想利用所有同一类型的胶囊都在不同位置提取同一个实体的事实。为此，我们分享同一胶囊类型的不同位置的变换矩阵，然后将每个胶囊的接受域中心的缩放坐标（行，列）添加到它的投票矩阵右侧栏中的头两个元素。我们称这种技术为坐标加成。这应该有助于这个共享的最终转换产生价值，因为这两个元素表示了这个相对于胶囊接受域中心的实体的精确位置。
 
-The primary capsules are followed by two 3x3 convolutional capsule layers (K=3), each with 32
-capsule types (C=D=32) with strides of 2 and one, respectively. The last layer of convolutional
-capsules is connected to the final capsule layer which has one capsule per output class.
-
-When connecting the last convolutional capsule layer to the final layer we do not want to throw
-away information about the location of the convolutional capsules but we also want to make use of
-the fact that all capsules of the same type are extracting the same entity at different positions. 
-
-We therefore share the transformation matrices between different positions of the same capsule type and
-add the scaled coordinate (row, column) of the center of the receptive field of each capsule to the first
-two elements of the right-hand column of its vote matrix. We refer to this technique as Coordinate
-Addition. 
-
-This should encourage the shared final transformations to produce values for those two
-elements that represent the fine position of the entity relative to the center of the capsule’s receptive
-field.
-
-主胶囊之后是两个3x3卷积胶囊层（K = 3），每个都有32个胶囊类型（C = D = 32），步幅分别为2和1。最后一层卷积胶囊连接到每个输出级都有一个胶囊的最终胶囊层。将最后一个卷积胶囊层连接到最后一层时，我们不想丢弃远离有关卷积胶囊位置的信息，我们也想利用所有同一类型的胶囊都在不同位置提取同一个实体的事实。为此，我们分享同一胶囊类型的不同位置的变换矩阵，然后将每个胶囊的接受域中心的缩放坐标（行，列）添加到它的投票矩阵右侧栏中的头两个元素。我们称这种技术为坐标加成。这应该有助于这个共享的最终转换产生价值，因为这两个元素表示了这个相对于胶囊接受域中心的实体的精确位置。
-
-The routing procedure is used between each adjacent pair of capsule layers. For convolutional capsules,
-each capsule in layer L + 1 sends feedback only to capsules within its receptive field in layer
-L. 
-
-Therefore each convolutional instance of a capsule in layer L receives at most kernel size X kernel
-size feedback from each capsule type in layer L + 1. 
-
-The instances closer to the border of the
-image receive fewer feedbacks with corner ones receiving only one feedback per capsule type in
-layer L + 1.
-
-路由程序在每对相邻的胶囊层之间使用。对于卷积胶囊，L+1层的每个胶囊只将反馈发送到L层中其接受域内的胶囊。因此，L层的一个胶囊的每个卷积实例以最大核尺寸X接收来自L+1层的每个胶囊类型的核尺寸反馈。越接近图像边界的实例接收较少的反馈，如角落的实例接收仅仅一个L+1层的一个反馈。
+路由程序在每对相邻的胶囊层之间使用。对于卷积胶囊，L+1层的每个胶囊只将反馈发送到L层中其接受域内的胶囊。因此，L层的一个胶囊的每个卷积实例以最大核尺寸X接收来自L+1层的每个胶囊类型的核尺寸反馈。越接近图像边界的实例接收较少的反馈，如角落实例接收仅一个来自L+1层的一个反馈。
 
 ### 4.1 SPREAD LOSS传播损失
 In order to make the training less sensitive to the initialization and hyper-parameters of the model,
@@ -135,51 +103,38 @@ By starting with a small margin of 0.2 and linearly increasing it during trainin
 dead capsules in the earlier layers. Spread loss is equivalent to squared Hinge loss with m = 1.
 Guermeur & Monfrini (2011) studies a variant of this loss in the context of multi class SVMs.
 
-为了降低训练对模型的初始参数和超参数敏感度，我们使用“传播损失”来直接最大化目标类（$a_t$）激活和其他类激活之间的间距。如果错误类别$a_i$的激活比对$a_t$余量m更近，那么它的罚额是距离平方：$$L_i = (max(0, m − (a_t − a_i))^2, L =\sum_{i \neq t}L_i (3)$$ 从0.2的小幅度开始，在训练过程中将其线性增加到0.9，我们避免了早期层中的死胶囊。传播损失相当于m = 1时的平方Hinge损失。Guermeur＆Monfrini（ 2011）研究了在多类SVM的背景下这种损失的变化。
+为了降低训练对模型的初始参数和超参数敏感度，我们使用“传播损失”来直接最大化目标类（$a_t$）激活和其他类激活之间的间距。如果错误类别$a_i$的激活比对$a_t$余量m更近，那么它的罚额是距离平方：$$L_i = (max(0, m − (a_t − a_i))^2, L =\sum_{i \neq t}L_i (3)$$ 从0.2的小幅度开始，在训练过程中将其线性增加到0.9，我们避免了早期层中的死胶囊。传播损失相当于m = 1时的Hinge损失值的平方。Guermeur＆Monfrini（ 2011）研究了在多类SVM背景下这种损失的一个变体。
 
-5 EXPERIMENTS实验
-The smallNORB dataset (LeCun et al. (2004)) has gray-level stereo images of 5 classes of toys:
-airplanes, cars, trucks, humans and animals. There are 10 physical instances of each class which are
-painted matte green. 5 physical instances of a class are selected for the training data and the other 5
-for the test data. Every individual toy is pictured at 18 different azimuths (0-340), 9 elevations and
-6 lighting conditions, so the training and test sets each contain 24,300 stereo pairs of 96x96 images.
-We selected smallNORB as a benchmark for developing our capsules system because it is carefully
-designed to be a pure shape recognition task that is not confounded by context and color, but it is
-much closer to natural images than MNIST.
+5 实验
 
 smallNORB数据集（LeCun et al.（2004））有5种玩具的灰度立体图像：飞机，汽车，卡车，人类和动物，每种有10个涂哑光绿色的物理实例。每种的5个物理实例为训练数据，另外5个为测试数据。每个玩具都有18个不同的方位角（0-340），9个高度和6种光照条件，所以训练和测试数据集均包含24,300个96x96图像的立体对。我们选择smallNORB作为开发胶囊系统的基准，因为它是专为一种纯粹的图形识别任务而进行的细致设计，不受上下文和颜色干扰，但它比MNIST更接近自然图像。
-
-Table 1: The effect of varying different components of our capsules architecture on smallNORB.
-Routing iterations Pose structure Loss Coordinate Addition Test error rate
-1 Matrix Spread Yes 9.7%
-2 Matrix Spread Yes 2.2%
-3 Matrix Spread Yes 1.8%
-5 Matrix Spread Yes 3.9%
-3 Vector Spread Yes 2.9%
-3 Matrix Spread No 2.6%
-3 Vector Spread No 3.2%
-3 Matrix Margin1 Yes 3.2%
-3 Matrix CrossEnt Yes 5.8%
-Baseline CNN with 4.2M parameters 5.2%
-CNN of Cires¸an et al. (2011) with extra input images & deformations 2.56%
-Our Best model (third row), with multiple crops during testing 1.4%
 
 表1：我们的胶囊架构的不同组件对smallNORB的影响。
 ![表一](https://github.com/humor250/matrixcapsules/blob/master/table1_matrixcapsules.png)
 
 We downsample smallNORB to 48 × 48 pixels and normalize each image to have zero mean and
-unit variance. During training, we randomly crop 32 × 32 patches and add random brightness and
-contrast to the cropped images. During test, we crop a 32 × 32 patch from the center of the image
-and achieve 1.8% test error on smallNORB. If we average the class activations over multiple crops
-at test time we achieve 1.4%. The best reported result on smallNORB without using meta data is
-2.56% (Cires¸an et al. (2011)). To achieve this, they added two additional stereo pairs of input images
-that are created by using an on-center off-surround filter and an off-center on-surround filter. They
-also applied affine distortions to the images. Our work also beats the Sabour et al. (2017) capsule
-work which achieves 2.7% on smallNORB. We also tested our model on NORB which is a jittered
+unit variance. 
+During training, we randomly crop 32 × 32 patches and add random brightness and
+contrast to the cropped images. 
+During test, we crop a 32 × 32 patch from the center of the image
+and achieve 1.8% test error on smallNORB. 
+If we average the class activations over multiple crops
+at test time we achieve 1.4%. 
+The best reported result on smallNORB without using meta data is
+2.56% (Cires¸an et al. (2011)). 
+To achieve this, they added two additional stereo pairs of input images
+that are created by using an on-center off-surround filter and an off-center on-surround filter. 
+
+They also applied affine distortions to the images. Our work also beats the Sabour et al. (2017) capsule
+work which achieves 2.7% on smallNORB. 
+We also tested our model on NORB which is a jittered
 version of smallNORB with added background and we achieved a 2.6% error rate which is on par
 with the state-of-the-art of 2.7% (Ciresan et al. (2012)).
+
 As the baseline for our experiments on generalization to novel viewpoints we train a CNN which
-has two convolutional layers with 32 and 64 channels respectively. Both layers have a kernel size
+has two convolutional layers with 32 and 64 channels respectively. 
+
+Both layers have a kernel size
 of 5 and a stride of 1 with a 2 × 2 max pooling. The third layer is a 1024 unit fully connected
 layer with dropout and connects to the 5-way softmax output layer. All hidden units use the ReLU
 non-linearity. We use the same image preparation for the CNN baseline as described above for the
@@ -192,17 +147,9 @@ we reduced the number of parameters by a factor of 15 to 310K compared with our 
 D = 16 with only 68K trainable parameters achieves 2.2% test error rate which also beats the prior
 state-of-the-art.
 
-我们将smallNORB缩减为48×48像素，并将每幅图像归一化为零均值和
-单位差异。在训练过程中，我们随机裁剪32×32个补丁并添加随机亮度和
-与裁剪图像形成对比。在测试过程中，我们从图像中心剪下32×32的补丁
-并在smallNORB上实现1.8％的测试错误。如果我们平均对多种作物进行类别激活
-在测试时我们达到了1.4％。在没有使用元数据的情况下，smallNORB上最好的报告结果是
-2.56％（Ciresfort等（2011））。为了实现这一点，他们添加了两个附加的立体声输入图像对
-这是通过使用中心偏离环绕滤波器和偏心环绕滤波器创建的。他们
-也对图像应用仿射失真。我们的工作还击败了Sabour等人。 （2017）胶囊
-在smallNORB上达到2.7％的工作。我们还在NORB上测试了我们的模型，这是一个抖动
-版本的smallNORB增加了背景，我们实现了2.6％的错误率
-最新的2.7％（Ciresan et al。（2012））。
+我们将smallNORB缩减为48×48像素，每幅图像正常化为有零均值和单位差异。在训练过程中，我们随机裁剪出32×32小图片并添加随机亮度和
+与裁剪的图像形成对比。在测试过程中，我们从图像中心剪下一个32×32的小图片，并在smallNORB上实现1.8％的测试错误。如果我们平均化测试时多个裁剪的种类激活，
+我们达到了1.4％。在不使用元数据的情况下，smallNORB上最好的报告结果是2.56％（Ciresfort等（2011））。为了实现这一点，他们添加了两个额外的立体图像对输入，图像是通过中心滤波器和离心滤波器创建的。他们也对图像应用仿射失真。我们的工作还击败了Sabour等人（2017）在smallNORB上达到2.7％的胶囊网络工作。我们还在NORB上测试了我们的模型，这是一个带增加背景的smallNORB的一个抖动版本，我们实现了2.6％的错误率，看齐了2.7％的最好记录（Ciresan et al。（2012））。
 作为我们对新颖观点进行概括的实验的基准，我们培训了一个CNN
 有两个分别具有32和64通道的卷积层。两个图层都有一个内核大小
 为5，步幅为1，最大为2×2。第三层是完全连接的1024个单元
