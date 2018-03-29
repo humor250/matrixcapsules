@@ -112,61 +112,21 @@ smallNORB数据集（LeCun et al.（2004））有5种玩具的灰度立体图像
 表1：我们的胶囊架构的不同组件对smallNORB的影响。
 ![表一](https://github.com/humor250/matrixcapsules/blob/master/table1_matrixcapsules.png)
 
-We downsample smallNORB to 48 × 48 pixels and normalize each image to have zero mean and
-unit variance. 
-During training, we randomly crop 32 × 32 patches and add random brightness and
-contrast to the cropped images. 
-During test, we crop a 32 × 32 patch from the center of the image
-and achieve 1.8% test error on smallNORB. 
-If we average the class activations over multiple crops
-at test time we achieve 1.4%. 
-The best reported result on smallNORB without using meta data is
-2.56% (Cires¸an et al. (2011)). 
-To achieve this, they added two additional stereo pairs of input images
-that are created by using an on-center off-surround filter and an off-center on-surround filter. 
+我们将smallNORB缩减为48×48像素，每幅图像正常化为有零均值和单位差异。
+在训练过程中，我们随机裁剪出32×32小图片并添加随机亮度和与裁剪的图像形成对比。
+在测试过程中，我们从图像中心剪下一个32×32的小图片，并在smallNORB上实现1.8％的测试错误。如果我们平均化测试时多个裁剪的种类激活，我们达到了1.4％。在不使用元数据的情况下，smallNORB上最好的报告结果是2.56％（Ciresfort等（2011））。为了实现这一点，他们添加了两个额外的立体图像对输入，图像是通过中心滤波器和离心滤波器创建的。他们也对图像应用仿射失真。我们的工作还击败了Sabour等人（2017）在smallNORB上达到2.7％的胶囊网络工作。我们还在NORB上测试了我们的模型，这是一个带增加背景的smallNORB的一个抖动版本，我们实现了2.6％的错误率，看齐了2.7％的最好记录（Ciresan et al.（2012））。
 
-They also applied affine distortions to the images. Our work also beats the Sabour et al. (2017) capsule
-work which achieves 2.7% on smallNORB. 
-We also tested our model on NORB which is a jittered
-version of smallNORB with added background and we achieved a 2.6% error rate which is on par
-with the state-of-the-art of 2.7% (Ciresan et al. (2012)).
-
-As the baseline for our experiments on generalization to novel viewpoints we train a CNN which
-has two convolutional layers with 32 and 64 channels respectively. 
-
-Both layers have a kernel size
-of 5 and a stride of 1 with a 2 × 2 max pooling. The third layer is a 1024 unit fully connected
-layer with dropout and connects to the 5-way softmax output layer. All hidden units use the ReLU
-non-linearity. We use the same image preparation for the CNN baseline as described above for the
-capsule network. Our baseline CNN was the result of an extensive hyperparameter search over filter
-sizes, numbers of channels and learning rates.
-The CNN baseline achieves 5.2% test error rate on smallNORB and has 4.2M parameters. We
-deduce that the Cires¸an et al. (2011) network has 2.7M parameters. By using small matrix multiplies,
-we reduced the number of parameters by a factor of 15 to 310K compared with our baseline CNN
-(and a factor of 9 w.r.t Cires¸an et al. (2011)). A smaller capsule network of A = 64, B = 8, C =
-D = 16 with only 68K trainable parameters achieves 2.2% test error rate which also beats the prior
-state-of-the-art.
-
-我们将smallNORB缩减为48×48像素，每幅图像正常化为有零均值和单位差异。在训练过程中，我们随机裁剪出32×32小图片并添加随机亮度和
-与裁剪的图像形成对比。在测试过程中，我们从图像中心剪下一个32×32的小图片，并在smallNORB上实现1.8％的测试错误。如果我们平均化测试时多个裁剪的种类激活，
-我们达到了1.4％。在不使用元数据的情况下，smallNORB上最好的报告结果是2.56％（Ciresfort等（2011））。为了实现这一点，他们添加了两个额外的立体图像对输入，图像是通过中心滤波器和离心滤波器创建的。他们也对图像应用仿射失真。我们的工作还击败了Sabour等人（2017）在smallNORB上达到2.7％的胶囊网络工作。我们还在NORB上测试了我们的模型，这是一个带增加背景的smallNORB的一个抖动版本，我们实现了2.6％的错误率，看齐了2.7％的最好记录（Ciresan et al。（2012））。
-作为我们对新颖观点进行概括的实验的基准，我们培训了一个CNN
-有两个分别具有32和64通道的卷积层。两个图层都有一个内核大小
-为5，步幅为1，最大为2×2。第三层是完全连接的1024个单元
-丢失层并连接到5路softmax输出层。所有隐藏的单位使用ReLU
-非线性。我们对CNN基线使用与上述相同的图像准备
-胶囊网络。我们的基线CNN是广泛的超参数搜索过滤器的结果
-规模，渠道数量和学习率。
-CNN基线在smallNORB上达到5.2％的测试错误率，并具有4.2M参数。我们
-推断Ciresfort等人。 （2011）网络拥有2.7M参数。通过使用小矩阵乘法，
-与基准CNN相比，我们将参数数量减少了15到310K
-（和Ciresfort等人（2011）的9倍因子）。 A = 64，B = 8，C =的小胶囊网络
-D = 16，只有68K可训练参数达到了2.2％的测试错误率，这也击败了之前的测试错误率
-最先进的。
+作为我们对新视角进行总结的实验基准，我们训练了一个CNN，带有两个分别具有32和64通道的卷积层。两层都有一个内核大小
+为5，步幅为1，带一个2×2最大化池。第三层是1024个单元的带丢失（dropout）的全连接层，并连接到5路softmax输出层。所有隐藏的单元使用ReLU
+非线性算法。对CNN基准，我们准备了上述对胶囊网络相同的图片。我们的基准CNN是广泛的超参搜索（过滤器大小，通道数量和学习率）的结果。
+CNN基准在smallNORB上达到5.2％的测试错误率，有4.2M参数量。我们推断Ciresfort等人（2011）网络拥有2.7M参数。通过使用小矩阵乘法，与基准CNN相比，我们将参数数量减少了15到310K（和Ciresfort等人（2011）的9倍因子）。 一个只有68K可训练参数的A=64，B=8，C=D=16的小胶囊网络，达到了2.2％的测试错误率，这也击败了之前的最优的测试错误率。
 
 Fig. 2 shows how EM routing adjusts the vote assignments and the capsule means to find the tight
-clusters in the votes. The histograms show the distribution of vote distances to the mean (pose) of
-each class capsule during routing iterations. At the first iteration, votes are distributed equally between
+clusters in the votes. 
+The histograms show the distribution of vote distances to the mean (pose) of
+each class capsule during routing iterations. 
+
+At the first iteration, votes are distributed equally between
 5 final layer capsules. Therefore, all capsules receive votes closer than 0.05 to their calculated
 mean. In the second iteration, the assignment probability for agreeing votes increases. Therefore,
 most of the votes are assigned to the detected clusters, the animal and human class in the middle
@@ -178,7 +138,8 @@ probability per capsule, we could view the capsule activations like the mixing p
 mixture of Gaussians and set them to be proportional to the sum of the assignment probabilities
 of a capsule and to sum to 1 over all the capsules in a layer. This increases the test error rate on
 
-图2显示了EM路由如何调整投票分配以及胶囊装置如何调整投票分配在选票中聚集。直方图显示投票距离的均值（姿态）分布在路由迭代期间每个分类胶囊。在第一次迭代中，投票之间平均分配5最后一层胶囊。因此，所有胶囊的计算结果都会得到接近0.05的选票意思。在第二次迭代中，同意投票的分配概率增加。因此，大多数选票都被分配到检测到的集群，中间是动物和人类排，而其他胶囊只能得到比计算结果更多的零散投票意思。附录中图2的缩小版显示了投票的完整分配每次路由迭代的距离。而不是使用我们的MDL派生的胶囊激活术语来计算单独的激活每个胶囊的概率，我们可以观察胶囊激活，如a中的混合比例高斯混合，并将它们设置为与分配概率的总和成比例
+图2 显示了EM路由如何调整投票分配和胶囊均值，以找到选票中的密集群。
+直方图显示投票距离的均值（姿态）分布在路由迭代期间每个分类胶囊。在第一次迭代中，投票之间平均分配5最后一层胶囊。因此，所有胶囊的计算结果都会得到接近0.05的选票意思。在第二次迭代中，同意投票的分配概率增加。因此，大多数选票都被分配到检测到的集群，中间是动物和人类排，而其他胶囊只能得到比计算结果更多的零散投票意思。附录中图2的缩小版显示了投票的完整分配每次路由迭代的距离。而不是使用我们的MDL派生的胶囊激活术语来计算单独的激活每个胶囊的概率，我们可以观察胶囊激活，如a中的混合比例高斯混合，并将它们设置为与分配概率的总和成比例
 的胶囊，并且在一层中的所有胶囊上总计为1。这增加了测试错误率
 
 ![图2](https://github.com/humor250/matrixcapsules/blob/master/pic2_matrixcapsules.png)
