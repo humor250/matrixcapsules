@@ -47,27 +47,42 @@ $$a_j = logistic\biggl(λ\bigl(βa − βu\sum_ir_{ij} −\sum_hcost^h_j\bigr)\b
 
 ----------
 1: **procedure** EM ROUTING$(a, V )$
+
 2: $∀i ∈ Ω_L, j ∈ Ω_L+1: R_{ij} ← 1/|Ω_L+1|$
+
 3: for $t$ iterations do
+
 4: $∀j ∈ Ω_L+1$: M-STEP$(a, R, V , j)$
+
 5: $∀i ∈ Ω_L$: E-STEP$(µ, σ, a, V , i)$
+
 return $a, M$
 
 1: **procedure** M-STEP$(a, R, V , j)$ . 》for one higher-level capsule, j
+
 2: $∀i ∈ Ω_L: R_{ij} ← R_{ij} ∗ a_i$
+
 3: $∀h: µ^h_j ←\frac{\sum_i R_{ij}V^h_{ij}}{\sum_i R_{ij}}$
+
 4: $∀h: (σ^h_j)^2 ←\frac{\sum_i Rij (V^h_{ij}−µ^h_j)^2}{\sum_i Rij}$
+
 5: $cost^h ←\bigl(βu + log(σ^h_j)\bigr)\sum_i R_{ij}$
+
 6: $a_j ← logistic(λ(β_a −\sum_hcost^h))$
 
+
 1: **procedure** E-STEP(µ, σ, a, V , i) . 》for one lower-level capsule, i
+
 2: $∀j ∈ Ω_{L+1}: p_j ← \frac{1}{\sqrt{\prod^H_h2π(σ^h_j)2}}exp\bigl(−\sum^H_h\frac{(V^h_{ij}−µ^h_j)2}{2(σ^h_j)2}\bigr)$
+
 3: $∀j ∈ Ω_{L+1}: R_{ij} ← \frac{a_j p_j}{\sum_{k∈Ω_{L+1}}a_kp_k}$
+
 
 ### 4 THE CAPSULES ARCHITECTURE胶囊网络架构
 模型总的架构如图1所示。
 模型由一个5x5带32通道(A=32)，用ReLU非线性函数，步长为2的卷积层开始。所有其它层是胶囊层，始于主胶囊层。
 B=32主胶囊类型的每个胶囊的4x4姿态是一个习得的所有的低层的在那个中心weiReLU的线性转换。
+
 
 
 图 1：带有一个 ReLU 卷积层，后面跟着一个主卷积 capsule 层和两个其它卷积 capsule 层。
