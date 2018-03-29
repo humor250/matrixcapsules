@@ -1,5 +1,3 @@
-<script type="text/javascript" async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 ## 用EM路由实现的矩阵胶囊（中文译本）
         
 Geoffrey Hinton, Sara Sabour, Nicholas Frosst{geoffhinton, sasabour, frosst}@google.com
@@ -32,7 +30,7 @@ activities in a standard neural net: they depend on the current input and are no
 In between
 each capsule i in layer L and each capsule j in layer L + 1 is a 4x4 trainable transformation matrix,
 Wij . 
-在L层的每个胶囊i和L+1层的每个胶囊j之间有一个4x4的可训练的转换矩阵，Wij。
+在L层的每个胶囊i和L+1层的每个胶囊j之间有一个4x4的可训练的转换矩阵，$$\begin{align*}Wij\end{align*}$$。
 These $W_{ij}$ s (and two learned biases per capsule) are the only stored parameters and they
 are learned discriminatively. 
 这些$ W_{ij} $（和每个胶囊两个习得的偏置项）是唯一保存参数，而且它们是分别习得的。
