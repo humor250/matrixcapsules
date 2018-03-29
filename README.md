@@ -109,14 +109,7 @@ This should encourage the shared final transformations to produce values for tho
 elements that represent the fine position of the entity relative to the center of the capsule’s receptive
 field.
 
-主胶囊之后是两个3x3卷积胶囊层（K = 3），每个都有32个胶囊类型（C = D = 32），步幅分别为2和1。最后一层卷积胶囊连接到每个输出级都有一个胶囊的最终胶囊层。将最后一个卷积胶囊层连接到最后一层时，我们不想丢弃远离有关卷积胶囊位置的信息，我们也想利用所有同一类型的胶囊都在不同位置提取同一个实体的事实。为此，我们分享同一胶囊类型的不同位置的变换矩阵，然后将每个胶囊的感受野中心的缩放坐标（行，列）添加到第一个胶囊
-
-投票矩阵右侧栏中的两个元素。我们称这种技术为坐标
-加成。
-
-这应该鼓励共同的最终转变为这两者创造价值
-表示实体相对于胶囊接受中心的精确位置的元素
-领域。
+主胶囊之后是两个3x3卷积胶囊层（K = 3），每个都有32个胶囊类型（C = D = 32），步幅分别为2和1。最后一层卷积胶囊连接到每个输出级都有一个胶囊的最终胶囊层。将最后一个卷积胶囊层连接到最后一层时，我们不想丢弃远离有关卷积胶囊位置的信息，我们也想利用所有同一类型的胶囊都在不同位置提取同一个实体的事实。为此，我们分享同一胶囊类型的不同位置的变换矩阵，然后将每个胶囊的接受域中心的缩放坐标（行，列）添加到它的投票矩阵右侧栏中的头两个元素。我们称这种技术为坐标加成。这应该有助于这个共享的最终转换产生价值，因为这两个元素表示了这个相对于胶囊接受域中心的实体的精确位置。
 
 The routing procedure is used between each adjacent pair of capsule layers. For convolutional capsules,
 each capsule in layer L + 1 sends feedback only to capsules within its receptive field in layer
@@ -128,6 +121,14 @@ size feedback from each capsule type in layer L + 1.
 The instances closer to the border of the
 image receive fewer feedbacks with corner ones receiving only one feedback per capsule type in
 layer L + 1.
+
+路由程序在每对相邻的胶囊层之间使用。对于卷积胶囊，L+1层的每个胶囊只将反馈发送到L层中其接受域内的胶囊。
+
+因此，L层的一个胶囊的每个卷积实例以最大核尺寸X接收来自L+1层的每个胶囊类型的核尺寸反馈。
+
+更接近边界的实例
+图像接收较少的反馈与角落的每个胶囊类型只接收一个反馈
+层L + 1。
 
 ### 4.1 SPREAD LOSS
 In order to make the training less sensitive to the initialization and hyper-parameters of the model,
