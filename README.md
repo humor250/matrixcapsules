@@ -22,7 +22,7 @@ converts the whole set of activation probabilities and poses of the capsules in 
 activation probabilities and poses of capsules in the next layer.
 胶囊网络用一个复杂得多的非线性方法将一层中的全部激活概率和胶囊姿态集合转化为下一层的激活概率和胶囊姿态。
 A capsule network consists of several layers of capsules. The set of capsules in layer L is denoted
-as $$ΩL$$. Each capsule has a 4x4 pose matrix, M, and an activation probability, a. 
+as $$Ω_L$$. Each capsule has a 4x4 pose matrix, M, and an activation probability, a. 
 一个胶囊网络包含几个胶囊层。在L层的这组胶囊用$Ω_L$表示。每个胶囊有一个4x4姿态矩阵，M，和一个激活概率，a。
 These are like the
 activities in a standard neural net: they depend on the current input and are not stored. 
