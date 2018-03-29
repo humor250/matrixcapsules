@@ -84,7 +84,7 @@ return $a, M$
 模型由一个5x5带32通道(A=32)，用ReLU非线性函数，步长为2的卷积层开始。所有其它层是胶囊层，始于主胶囊层。
 B=32主胶囊类型的每个胶囊的4x4姿态是一个习得的所有的低层的在那个中心weiReLU的线性转换。
 
-![架构图](matrixcapsules/cape.png)
+![架构图](https://github.com/humor250/matrixcapsules/blob/master/cape.png)
 
 图 1：带有一个 ReLU 卷积层，后面跟着一个主卷积 capsule 层和两个其它卷积 capsule 层。
 
