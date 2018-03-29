@@ -147,7 +147,7 @@ We selected smallNORB as a benchmark for developing our capsules system because 
 designed to be a pure shape recognition task that is not confounded by context and color, but it is
 much closer to natural images than MNIST.
 
-smallNORB数据集（LeCun et al。（2004））有5种玩具的灰度立体图像：飞机，汽车，卡车，人类和动物，每种有10个涂哑光绿色的物理实例。每种的5个物理实例为训练数据，另外5个为测试数据。每个玩具都有18个不同的方位角（0-340），9个高度和6种光照条件，所以训练和测试数据集均包含24,300个96x96图像的立体对。我们选择smallNORB作为开发胶囊系统的基准，因为它是专为一种纯粹的图形识别任务而进行的细致设计，不受上下文和颜色干扰，但它比MNIST更接近自然图像。
+smallNORB数据集（LeCun et al.（2004））有5种玩具的灰度立体图像：飞机，汽车，卡车，人类和动物，每种有10个涂哑光绿色的物理实例。每种的5个物理实例为训练数据，另外5个为测试数据。每个玩具都有18个不同的方位角（0-340），9个高度和6种光照条件，所以训练和测试数据集均包含24,300个96x96图像的立体对。我们选择smallNORB作为开发胶囊系统的基准，因为它是专为一种纯粹的图形识别任务而进行的细致设计，不受上下文和颜色干扰，但它比MNIST更接近自然图像。
 
 Table 1: The effect of varying different components of our capsules architecture on smallNORB.
 Routing iterations Pose structure Loss Coordinate Addition Test error rate
@@ -163,4 +163,9 @@ Routing iterations Pose structure Loss Coordinate Addition Test error rate
 Baseline CNN with 4.2M parameters 5.2%
 CNN of Cires¸an et al. (2011) with extra input images & deformations 2.56%
 Our Best model (third row), with multiple crops during testing 1.4%
+
+表1：我们的胶囊架构的不同组件对smallNORB的影响。
+
+########路由迭代姿态结构损失坐标添加测试错误率，！！！！放张表！！！！
+
 We downsample smallNORB to 48 × 48 pixels and normalize each image to have zero mean and
