@@ -249,7 +249,7 @@ Table 2: A comparison of the smallNORB test error rate of the baseline CNN and t
 on novel viewpoints when both models are matched on error rate for familiar viewpoints.
 
 表2：在熟悉视角下两模型误差率相同时，新视角下基线CNN和胶囊模型的smalNORB测试错误率的比较
-![表2]()
+![表2](https://github.com/humor250/matrixcapsules/blob/master/table2_matrixcapsules.png)
 
 smallNORB to 4.5%. Tab. 1 summarizes the effects of the number of routing iterations, the type of
 loss, and the use of matrices rather than vectors for the poses.
@@ -326,7 +326,7 @@ FGSM计算损失w.r.t的梯度。每个像素的亮度然后改变像素
 创建敌对图片时步幅较小。我们也发现我们的模型更多
 比传统的卷积模型更能抵御攻击。
 
-![图3]()
+![图3](https://github.com/humor250/matrixcapsules/blob/master/pic3_matrixcapsules.png)
 
 Figure 3: Accuracy against  after an adversarial attack (left) and Success Rate after a targeted
 adversarial attack (right). The targeted attack results were evaluated by averaging the success rate
