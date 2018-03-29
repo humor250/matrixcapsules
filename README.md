@@ -79,7 +79,7 @@ return $a, M$
 3: $∀j ∈ Ω_{L+1}: R_{ij} ← \frac{a_j p_j}{\sum_{k∈Ω_{L+1}}a_kp_k}$
 
 
-### 4 THE CAPSULES ARCHITECTURE胶囊网络架构
+### 4 胶囊网络架构
 模型总的架构如图1所示。
 模型由一个5x5带32通道(A=32)，用ReLU非线性函数，步长为2的卷积层开始。所有其它层是胶囊层，始于主胶囊层。
 B=32主胶囊类型的每个胶囊的4x4姿态是一个习得的所有的低层的在那个中心weiReLU的线性转换。
@@ -122,13 +122,7 @@ The instances closer to the border of the
 image receive fewer feedbacks with corner ones receiving only one feedback per capsule type in
 layer L + 1.
 
-路由程序在每对相邻的胶囊层之间使用。对于卷积胶囊，L+1层的每个胶囊只将反馈发送到L层中其接受域内的胶囊。
-
-因此，L层的一个胶囊的每个卷积实例以最大核尺寸X接收来自L+1层的每个胶囊类型的核尺寸反馈。
-
-更接近边界的实例
-图像接收较少的反馈与角落的每个胶囊类型只接收一个反馈
-层L + 1。
+路由程序在每对相邻的胶囊层之间使用。对于卷积胶囊，L+1层的每个胶囊只将反馈发送到L层中其接受域内的胶囊。因此，L层的一个胶囊的每个卷积实例以最大核尺寸X接收来自L+1层的每个胶囊类型的核尺寸反馈。越接近图像边界的实例接收较少的反馈，如角落的实例接收仅仅一个L+1层的一个反馈。
 
 ### 4.1 SPREAD LOSS
 In order to make the training less sensitive to the initialization and hyper-parameters of the model,
