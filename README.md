@@ -249,7 +249,7 @@ Table 2: A comparison of the smallNORB test error rate of the baseline CNN and t
 on novel viewpoints when both models are matched on error rate for familiar viewpoints.
 
 表2：在熟悉视角下两模型误差率相同时，新视角下基线CNN和胶囊模型的smalNORB测试错误率的比较
-
+![表2]()
 
 smallNORB to 4.5%. Tab. 1 summarizes the effects of the number of routing iterations, the type of
 loss, and the use of matrices rather than vectors for the poses.
