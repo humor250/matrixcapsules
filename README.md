@@ -22,14 +22,14 @@ converts the whole set of activation probabilities and poses of the capsules in 
 activation probabilities and poses of capsules in the next layer.
 胶囊网络用一个复杂得多的非线性方法将一层中的全部激活概率和胶囊姿态集合转化为下一层的激活概率和胶囊姿态。
 A capsule network consists of several layers of capsules. The set of capsules in layer L is denoted
-as $$Ω_L$$. Each capsule has a 4x4 pose matrix, M, and an activation probability, a. 
+as $Ω_L$. Each capsule has a 4x4 pose matrix, M, and an activation probability, a. 
 一个胶囊网络包含几个胶囊层。在L层的这组胶囊用$Ω_L$表示。每个胶囊有一个4x4姿态矩阵，M，和一个激活概率，a。
 These are like the
 activities in a standard neural net: they depend on the current input and are not stored. 
 它们就像一个标准神经网络的活动：依赖于当前输入，不被保存。
 In between
 each capsule i in layer L and each capsule j in layer L + 1 is a 4x4 trainable transformation matrix,
-Wij . 
+$W_{ij}$ . 
 在L层的每个胶囊i和L+1层的每个胶囊j之间有一个4x4的可训练的转换矩阵，$W_{ij}$。
 These $W_{ij}$ s (and two learned biases per capsule) are the only stored parameters and they
 are learned discriminatively. 
@@ -38,7 +38,7 @@ The pose matrix of capsule i is transformed by Wij to cast a vote Vij = MiWij fo
 胶囊i的姿态矩阵由Wij进行变换，即对胶囊j的姿态矩阵投一票$V_{ij} = M_iW_{ij}$。
 The poses and activations of all the capsules in layer
 L + 1 are calculated by using a non-linear routing procedure which gets as input Vij and ai for all
-i ∈ ΩL, j ∈ ΩL+1.
+$i ∈ Ω_L, j ∈ Ω_{L+1}$.
 以$V_{ij}$ 和 $a_i（i ∈ Ω_L, j ∈ Ω_L+1）$为输入，用非线性路由程序对L+1层的全部胶囊的姿态和激活进行计算。
 The non-linear procedure is a version of the Expectation-Maximization procedure. 
 这个非线性程序是EM程序的一个版本。
