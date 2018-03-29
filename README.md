@@ -86,27 +86,46 @@ B=32主胶囊类型的每个胶囊的4x4姿态是一个习得的所有的低层�
 
 ![架构图](https://github.com/humor250/matrixcapsules/blob/master/cape.png)
 
-图 1：带有一个 ReLU 卷积层，后面跟着一个主卷积 capsule 层和两个其它卷积 capsule 层。
+图1：胶囊网络架构有一个ReLU卷积层，后面跟一个主卷积胶囊层和两个其它卷积胶囊层。
 
 The activations of the primary capsules are produced by applying the sigmoid function
 to the weighted sums of the same set of lower-layer ReLUs.
 主胶囊的激活是利用sigmoid函数处理同组的低层ReLU的权重总和产生。
+
 The primary capsules are followed by two 3x3 convolutional capsule layers (K=3), each with 32
 capsule types (C=D=32) with strides of 2 and one, respectively. The last layer of convolutional
 capsules is connected to the final capsule layer which has one capsule per output class.
+
 When connecting the last convolutional capsule layer to the final layer we do not want to throw
 away information about the location of the convolutional capsules but we also want to make use of
-the fact that all capsules of the same type are extracting the same entity at different positions. We
-therefore share the transformation matrices between different positions of the same capsule type and
+the fact that all capsules of the same type are extracting the same entity at different positions. 
+
+We therefore share the transformation matrices between different positions of the same capsule type and
 add the scaled coordinate (row, column) of the center of the receptive field of each capsule to the first
 two elements of the right-hand column of its vote matrix. We refer to this technique as Coordinate
-Addition. This should encourage the shared final transformations to produce values for those two
+Addition. 
+
+This should encourage the shared final transformations to produce values for those two
 elements that represent the fine position of the entity relative to the center of the capsule’s receptive
 field.
+
+主胶囊之后是两个3x3卷积胶囊层（K = 3），每个都有32个胶囊类型（C = D = 32），步幅分别为2和1。最后一层卷积胶囊连接到每个输出级都有一个胶囊的最终胶囊层。将最后一个卷积胶囊层连接到最后一层时，我们不想丢弃远离有关卷积胶囊位置的信息，我们也想利用所有同一类型的胶囊都在不同位置提取同一个实体的事实。为此，我们分享同一胶囊类型的不同位置的变换矩阵，然后将每个胶囊的感受野中心的缩放坐标（行，列）添加到第一个胶囊
+
+投票矩阵右侧栏中的两个元素。我们称这种技术为坐标
+加成。
+
+这应该鼓励共同的最终转变为这两者创造价值
+表示实体相对于胶囊接受中心的精确位置的元素
+领域。
+
 The routing procedure is used between each adjacent pair of capsule layers. For convolutional capsules,
 each capsule in layer L + 1 sends feedback only to capsules within its receptive field in layer
-L. Therefore each convolutional instance of a capsule in layer L receives at most kernel size X kernel
-size feedback from each capsule type in layer L + 1. The instances closer to the border of the
+L. 
+
+Therefore each convolutional instance of a capsule in layer L receives at most kernel size X kernel
+size feedback from each capsule type in layer L + 1. 
+
+The instances closer to the border of the
 image receive fewer feedbacks with corner ones receiving only one feedback per capsule type in
 layer L + 1.
 
