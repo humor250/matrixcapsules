@@ -136,3 +136,15 @@ dead capsules in the earlier layers. Spread loss is equivalent to squared Hinge 
 Guermeur & Monfrini (2011) studies a variant of this loss in the context of multi class SVMs.
 
 为了降低训练对模型的初始参数和超参数敏感性，我们使用“传播损失”来直接最大化目标类（at）激活和其他类激活之间的差距。如果错误类别ai的激活比余量m更近，那么它的罚额是距离平方：$$L_i = (max(0, m − (a_t − a_i))^2, L =\sum_{i \neq t}L_i (3)$$ 从0.2的小余量开始，在训练过程中将其线性增加到0.9，我们避免了早期层中的死胶囊。扩散损失相当于m = 1时的平方Hinge损失。Guermeur＆Monfrini（ 2011）研究了在多类SVM的背景下这种损失的变化。
+
+5 EXPERIMENTS实验
+The smallNORB dataset (LeCun et al. (2004)) has gray-level stereo images of 5 classes of toys:
+airplanes, cars, trucks, humans and animals. There are 10 physical instances of each class which are
+painted matte green. 5 physical instances of a class are selected for the training data and the other 5
+for the test data. Every individual toy is pictured at 18 different azimuths (0-340), 9 elevations and
+6 lighting conditions, so the training and test sets each contain 24,300 stereo pairs of 96x96 images.
+We selected smallNORB as a benchmark for developing our capsules system because it is carefully
+designed to be a pure shape recognition task that is not confounded by context and color, but it is
+much closer to natural images than MNIST.
+
+smallNORB数据集（LeCun et al。（2004））有5种玩具的灰度立体图像：飞机，汽车，卡车，人类和动物，每种有10个涂哑光绿色的物理实例。每种的5个物理实例为训练数据，另外5个为测试数据。每个玩具都有18个不同的方位角（0-340），9个高度和6种光照条件，所以训练和测试数据集均包含24,300个96x96图像的立体对。我们选择smallNORB作为开发胶囊系统的基准，因为它是专为一种纯粹的图形识别任务而进行的细致设计，不受上下文和颜色干扰，但它比MNIST更接近自然图像。
