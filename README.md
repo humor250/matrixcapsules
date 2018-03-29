@@ -135,7 +135,7 @@ By starting with a small margin of 0.2 and linearly increasing it during trainin
 dead capsules in the earlier layers. Spread loss is equivalent to squared Hinge loss with m = 1.
 Guermeur & Monfrini (2011) studies a variant of this loss in the context of multi class SVMs.
 
-为了降低训练对模型的初始参数和超参数敏感性，我们使用“传播损失”来直接最大化目标类（at）激活和其他类激活之间的差距。如果错误类别ai的激活比余量m更近，那么它的罚额是距离平方：$$L_i = (max(0, m − (a_t − a_i))^2, L =\sum_{i \neq t}L_i (3)$$ 从0.2的小余量开始，在训练过程中将其线性增加到0.9，我们避免了早期层中的死胶囊。扩散损失相当于m = 1时的平方Hinge损失。Guermeur＆Monfrini（ 2011）研究了在多类SVM的背景下这种损失的变化。
+为了降低训练对模型的初始参数和超参数敏感度，我们使用“传播损失”来直接最大化目标类（$a_t$）激活和其他类激活之间的间距。如果错误类别$a_i$的激活比对$a_t$余量m更近，那么它的罚额是距离平方：$$L_i = (max(0, m − (a_t − a_i))^2, L =\sum_{i \neq t}L_i (3)$$ 从0.2的小幅度开始，在训练过程中将其线性增加到0.9，我们避免了早期层中的死胶囊。传播损失相当于m = 1时的平方Hinge损失。Guermeur＆Monfrini（ 2011）研究了在多类SVM的背景下这种损失的变化。
 
 5 EXPERIMENTS实验
 The smallNORB dataset (LeCun et al. (2004)) has gray-level stereo images of 5 classes of toys:
@@ -148,3 +148,19 @@ designed to be a pure shape recognition task that is not confounded by context a
 much closer to natural images than MNIST.
 
 smallNORB数据集（LeCun et al。（2004））有5种玩具的灰度立体图像：飞机，汽车，卡车，人类和动物，每种有10个涂哑光绿色的物理实例。每种的5个物理实例为训练数据，另外5个为测试数据。每个玩具都有18个不同的方位角（0-340），9个高度和6种光照条件，所以训练和测试数据集均包含24,300个96x96图像的立体对。我们选择smallNORB作为开发胶囊系统的基准，因为它是专为一种纯粹的图形识别任务而进行的细致设计，不受上下文和颜色干扰，但它比MNIST更接近自然图像。
+
+Table 1: The effect of varying different components of our capsules architecture on smallNORB.
+Routing iterations Pose structure Loss Coordinate Addition Test error rate
+1 Matrix Spread Yes 9.7%
+2 Matrix Spread Yes 2.2%
+3 Matrix Spread Yes 1.8%
+5 Matrix Spread Yes 3.9%
+3 Vector Spread Yes 2.9%
+3 Matrix Spread No 2.6%
+3 Vector Spread No 3.2%
+3 Matrix Margin1 Yes 3.2%
+3 Matrix CrossEnt Yes 5.8%
+Baseline CNN with 4.2M parameters 5.2%
+CNN of Cires¸an et al. (2011) with extra input images & deformations 2.56%
+Our Best model (third row), with multiple crops during testing 1.4%
+We downsample smallNORB to 48 × 48 pixels and normalize each image to have zero mean and
