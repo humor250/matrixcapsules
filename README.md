@@ -165,7 +165,7 @@ CNN of Cires¸an et al. (2011) with extra input images & deformations 2.56%
 Our Best model (third row), with multiple crops during testing 1.4%
 
 表1：我们的胶囊架构的不同组件对smallNORB的影响。
-！[表一]https://github.com/humor250/matrixcapsules/blob/master/table1_matrixcapsules.png
+![表一](https://github.com/humor250/matrixcapsules/blob/master/table1_matrixcapsules.png)
 
 We downsample smallNORB to 48 × 48 pixels and normalize each image to have zero mean and
 unit variance. During training, we randomly crop 32 × 32 patches and add random brightness and
