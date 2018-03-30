@@ -207,26 +207,44 @@ robust to the attack than the traditional convolutional model.
 已经表明，模型中对抗攻击的一些鲁棒性可能由于在梯度Brendel＆Bethge（2017）计算中简单数字的不稳定性。为了确保这不是我们模型稳健性的唯一原因，针对胶囊模型中的图像，我们计算了梯度中零值的百分比，并且发现其小于CNN。此外，胶囊梯度虽然小于CNN，但只小了2个数量级，而不是在Brendel＆Bethge（2017）的工作所见的16个数量级。
 最后，我们测试我们模型对黑匣子攻击的鲁棒性。通过用一个CNN生成对抗样本，并在胶囊模型和不同的CNN上测试它们。我们发现，胶囊模型在这项任务上的表现并不比CNN好得多。
 
-7 RELATED WORK
+7 RELATED WORK相关工作
 Among the multiple recent attempts at improving the ability of neural networks to deal with viewpoint
 variations, there are two main streams. One stream attempts to achieve viewpoint invariance
 and the other aims for viewpoint equivariance. The work presented by Jaderberg et al. (2015)), Spatial
 Transformer Networks, seeks viewpoint invariance by changing the sampling of CNNs according
 to a selection of affine transformations. De Brabandere et al. (2016) extends spatial transformer
-networks where the filters are adapted during inference depending on the input. They generate different
+networks where the filters are adapted during inference depending on the input. 
+
+They generate different
 filters for each locality in the feature map rather than applying the same transformation to all
-filters. Their approach is a step toward input covariance detection from traditional pattern matching
+filters. 
+在最近多次尝试提高神经网络处理视点变化能力方面，有两个主流。一个尝试实现视点不变性另一个目标是视点同变性。Jaderberg等人提出的工作。（2015）），空间转换网络，按照选择一个仿射变换，通过改变CNN的采样来寻求视点不变性。 De Brabandere等人（2016年）扩展了空间转换器网络，在输入推理时采用过滤器。他们为特征映射中的每个位置生成不同的过滤器，而不是对所有过滤器应用同一转换。
+
+Their approach is a step toward input covariance detection from traditional pattern matching
 frameworks like standard CNNs (LeCun et al. (1990)). Dai et al. (2017) improves upon spatial
-transformer networks by generalizing the sampling method of filters. Our work differs substantially
-in that a unit is not activated based on the matching score with a filter (either fixed or dynamically
-changing during inference). In our case, a capsule is activated only if the transformed poses coming
-from the layer below match each other. This is a more effective way to capture covariance and leads
-to models with many fewer parameters that generalize better.
-The success of CNNs has motivated many researchers to extend the translational equivariance built
-in to CNNs to include rotational equivariance (Cohen & Welling (2016), Dieleman et al. (2016),
-Oyallon & Mallat (2015)). The recent approach in Harmonic Networks (Worrall et al. (2017))
+transformer networks by generalizing the sampling method of filters. 
+
+Our work differs substantially in that a unit is not activated based on the matching score with a filter (either fixed or dynamically changing during inference). 
+In our case, a capsule is activated only if the transformed poses coming from the layer below match each other. 
+
+This is a more effective way to capture covariance and leads to models with many fewer parameters that generalize better.
+
+The success of CNNs has motivated many researchers to extend the translational equivariance built in to CNNs to include rotational equivariance (Cohen & Welling (2016), Dieleman et al. (2016), Oyallon & Mallat (2015)). 
+
+The recent approach in Harmonic Networks (Worrall et al. (2017))
 achieves rotation equivariant feature maps by using circular harmonic filters and returning both the
-maximal response and orientation using complex numbers. This shares the basic representational
+maximal response and orientation using complex numbers. 
+
+他们的方法是从传统模式匹配框架，如标准CNN（LeCun et al。（1990））. Dai et al.（2017年）向输入协变性检测迈出的一步，这样通过推广滤波器的抽样方法提升空间转换网络。
+我们的工作很大不同于那种：根据过滤器（固定或在推断期间动态改变）的匹配分数，确定单元是否激活。
+在我们的例子中，只有在转换姿势来自于彼此匹配的下层时，一个胶囊才会激活。这是一个捕获协变性和引导出更好更少参数模型的更有效方法。
+
+CNN的成功激发了许多研究人员扩展针对CNN所内建的同变性，以包容旋转同变性（Cohen＆Welling（2016），Dieleman等（2016），
+Oyallon＆Mallat（2015））。 
+
+Harmonic Networks最近进展是（Worrall et al。（2017））通过使用圆谐波滤波器和用复杂数字返回最大响应和方向实现旋转同变特征映射。
+
+This shares the basic representational
 idea of capsules: By assuming that there is only one instance of the entity at a location, we can
 use several different numbers to represent its properties. They use a fixed number of streams of
 rotation orders. By enforcing the equality of the sum of rotation orders along any path, they achieve
@@ -236,6 +254,8 @@ et al. (2016)). Our approach encodes general viewpoint equivariance rather than 
 rotations. Symmetry networks (Gens & Domingos (2014)) use iterative Lucas-Kanade optimization
 to find poses that are supported by the most low-level features. Their key weakness is that the
 iterative algorithm always starts at the same pose, rather than the mean of the bottom-up votes.
+
+这分享基本上代表了胶囊网络的想法：假设一个位置只有一个实体实例，我们可以使用几个不同的数字来表示它的属性。他们使用固定数量流的旋转次序。通过沿着任何路径执行旋转次序总和等式，他们实现补丁式旋转同变性。这种方法比数据增强更具参数效率方法，复制特征地图或复制过滤器（Fasel＆Gatica-Perez（2006），Laptev等人。 （2016））。我们的目标编码一般视点同变性而不是仅仿射二维旋转。对称网络（Gens＆Domingos（2014））使用迭代Lucas-Kanade优化找到最低级特征支持的姿态。他们的关键弱点是，迭代算法总是始于相同的姿势，而不是自下而上选票的均值。
 
 Lenc & Vedaldi (2016) proposes a feature detection mechanism (DetNet) that is equivariant to affine
 transformations. DetNet is designed to detect the same points in the image under different viewpoint
@@ -251,39 +271,8 @@ has attention in the opposite direction. The competition is not between the lowe
 a higher-level capsule might attend to. It is between the higher-level capsules that a lower-level
 capsule might send its vote to.
 
-7相关工作
-最近多次尝试提高神经网络处理视点的能力
-变化，有两个主要流。一个流尝试实现视点不变性
-另一个目标是视点等同性。 Jaderberg等人提出的工作。 （2015）），Spatial
-变压器网络通过改变CNN的采样来寻求视点不变性
-到选择仿射变换。 De Brabandere等人。 （2016年）扩展了空间变压器
-根据输入推理过滤器的网络。他们产生不同的
-为特征映射中的每个位置过滤，而不是对所有位置应用相同的转换
-过滤器。他们的方法是从传统模式匹配向输入协方差检测迈出的一步
-像标准CNN这样的框架（LeCun et al。（1990））。 Dai et al。 （2017年）改善空间
-变压器网络通过推广滤波器的抽样方法。我们的工作差别很大
-因为根据过滤器的匹配分数（固定或动态），单位不会被激活
-在推断期间改变）。在我们的例子中，只有在转换后的姿势到来时才会激活胶囊
-从下面的图层互相匹配。这是捕获协方差和线索的更有效方法
-到具有更少泛化参数的模型更好。
-CNN的成功促使许多研究人员扩展了所建立的平移等价性
-包括旋转等变量（Cohen＆Welling（2016），Dieleman等（2016），
-Oyallon＆Mallat（2015））。 Harmonic Networks最近的做法（Worrall et al。（2017））
-通过使用圆谐波滤波器实现旋转等变特征映射并返回两者
-最大响应和使用复数的方向。这共享基本代表性
-胶囊的想法：通过假设一个位置只有一个实体实例，我们可以
-使用几个不同的数字来表示它的属性。他们使用固定数量的流
-轮换订单。通过沿着任何路径执行轮换顺序总和的等式，它们可以实现
-补丁式旋转等变性。这种方法比数据增强更具参数效率
-方法，复制特征地图或复制过滤器（Fasel＆Gatica-Perez（2006），Laptev
-等人。 （2016））。我们的方法编码一般视点等变量而不是仅仿射二维
-旋转。对称网络（Gens＆Domingos（2014））使用迭代Lucas-Kanade优化
-找到最低级别功能支持的姿势。他们的关键弱点是，
-迭代算法始终始于相同的姿势，而不是自下而上的投票的意思。
-
-Lenc和Vedaldi（2016）提出了一个与仿射等同的特征检测机制（DetNet）
-TRANSF
-
+Lenc和Vedaldi（2016）提出了一个与仿射同变的特征检测机制（DetNet）。DetNet旨在检测不同视点变化下的图像的相同点。这项工作与我们的工作是正交的，但DetNet可能是实现解除渲染的第一阶段，即激活主胶囊层这项工作的一个好方法。我们的路由算法可以被看作是一种关注机制。在这个观点上，它与Gregor et al. (2015)等人的工作相关，通过使用高斯内核参与由编码器生成的特征映射的不同部分，他们改进了一个生成模型的解码器性能。Vaswani
+et al. (2017)使用softmax关注机制，针对翻译任务和为查询而生成编码时，将查询序列部分与输入序列部分进行匹配。他们使用循环架构显示出对以前翻译工作的改进。我们的算法关注在相反的方向。竞争不在一个高级的胶囊可能会参加的低级胶囊之间，而在一个低级胶囊可能会将其选票发送到的高级胶囊之间。
 
 7.1 PREVIOUS WORK ON CAPSULES
 Hinton et al. (2011) used a transformation matrix in a transforming autoencoder that learned to
