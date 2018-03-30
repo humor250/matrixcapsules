@@ -105,7 +105,7 @@ Guermeur & Monfrini (2011) studies a variant of this loss in the context of mult
 
 为了降低训练对模型的初始参数和超参数敏感度，我们使用“传播损失”来直接最大化目标类（$a_t$）激活和其他类激活之间的间距。如果错误类别$a_i$的激活比对$a_t$余量m更近，那么它的罚额是距离平方：$$L_i = (max(0, m − (a_t − a_i))^2, L =\sum_{i \neq t}L_i (3)$$ 从0.2的小幅度开始，在训练过程中将其线性增加到0.9，我们避免了早期层中的死胶囊。传播损失相当于m = 1时的Hinge损失值的平方。Guermeur＆Monfrini（ 2011）研究了在多类SVM背景下这种损失的一个变体。
 
-5 实验
+### 5 实验
 
 smallNORB数据集（LeCun et al.（2004））有5种玩具的灰度立体图像：飞机，汽车，卡车，人类和动物，每种有10个涂哑光绿色的物理实例。每种的5个物理实例为训练数据，另外5个为测试数据。每个玩具都有18个不同的方位角（0-340），9个高度和6种光照条件，所以训练和测试数据集均包含24,300个96x96图像的立体对。我们选择smallNORB作为开发胶囊系统的基准，因为它是专为一种纯粹的图形识别任务而进行的细致设计，不受上下文和颜色干扰，但它比MNIST更接近自然图像。
 
@@ -166,7 +166,7 @@ of the test set with novel viewpoints. Results in Tab. 2 show that compared with
 CNN capsules with matched performance on familiar viewpoints reduce the test error rate on novel
 viewpoints by about 30% for both novel azimuths and novel elevations.
 
-5.1新视角概述
+### 5.1 新视角概述
 更严格的总体测试，是使用有限范围的视角进行训练，和测试范围更宽。我们用三分之一的训练数据包括方位角（300,320,340,0,20,40）对卷积基准和胶囊模型进行训练，并用三分之二测试数据包含方位角从60到280进行测试。在另一个实验中，我们针对3个更小高度进行训练和6个较大的高度进行测试。
 很难确定胶囊模型是否对新视角总体上更好，因为它在所有视角上，实现了更好的测试准确性。为了消除这个混杂因素，在第三测试集用于训练视点时，胶囊模型的性能与基准CNN匹配，我们停止训练。然后，我们比较在三分之二测试集上的匹配模型与新视角。表2的结果表明，与基线相比，在熟悉视角上性能匹配的胶囊，在新视角上，对于新方位角和新高程，均减少了约为30％测试错误率。
 
@@ -195,7 +195,7 @@ Method (Kurakin et al. (2016)), which is simply the aforementioned attack except
 smaller steps when creating the adversarial image. Here too we find that our model is much more
 robust to the attack than the traditional convolutional model.
 
-6 对抗鲁棒性
+### 6 对抗鲁棒性
 人们对神经网络在对抗样本时的脆弱性越来越感兴趣。攻击者稍微改变的输入就会欺骗神经网络分类器制造错误分类。这些输入可以通过各种方式创建，但直接的策略如FGSM（Goodfellow et al.（2014））已经显示大大降低了卷积神经网络执行图像分类任务的准确性。我们比较胶囊模型和传统卷积模型抵御这种攻击的能力。FGSM计算损失w.r.t的梯度，每个像素强度，然后通过固定值$\epsilon$在提高损失的方向上改变像素强度。这样，这些变化只依赖于每个像素渐变的信号。这可以扩展到成一个针对性的攻击，方法是通过更新输入来最大化一个特定错误类别的分类概率。我们使用FGSM生成一个对抗攻击，因为它只有一个超参数，并且很容易比较具有非常不同梯度大小的模型。
 
 为了测试模型的鲁棒性，我们用完全训练的模型从测试集中生成对抗图片。然后我们有了这些图片的模型准确性报告。我们发现我们的模型对于普通和有针对性的FGSM攻击，明显地都不那么脆弱；一个小的$\epsilon$可以减少卷积模型的精度远远超过一个相同$\epsilon$在胶囊模型上的作用（图3）。还应该指出，胶囊模型的准确性在非针对性攻击后，绝不会降到（20％）以下几率；而卷积模型准确性会明显地因为$\epsilon$而低到其几率小到0.2。我们还测试了稍微复杂的对抗攻击，即基本迭代方法（Kurakin et al.（2016）），其就是上述攻击，只是创建攻击图片时采取多个更小步骤。这也表明我们的模型比传统的卷积模型具有强得多的抗击力。
@@ -291,8 +291,7 @@ insensitive to the difference between a quite good agreement and a very good agr
 transformation matrices have n
 2 parameters rather than just n.
 
-7.1 胶囊网络的前期工作
-
+### 7.1 胶囊网络之前工作
 Hinton等人（2011）在一个变换自编码器中使用了一个变换矩阵，自解码器知道如何将一对立体图像转换为略微不同视点的立体对。然而，该系统需要从外部提供变换矩阵。最近，协议路由被证明对分割高度重叠的数字是有效的（Sabour等（2017）），但是这个系统有几个缺陷，我们在本文中已经解决了这个问题：
 
 1. 它使用姿态向量的长度，来表示由一个胶囊表示的实体存在的概率。要保持长度小于1，需要一个无原则的非线性，并且这可以防止任何由迭代路由程序最小化的明智的目标函数的存在。
@@ -315,7 +314,7 @@ data-sets such as ImageNet.
 ACKNOWLEDGMENTS Thanks to Robert Gens, Eric Langlois, Taco Cohen and anonymous
 commentators for helpful discussions and to everyone who made TensorFlow.
 
-8 结论
+### 8 结论
 以Sabour等人（2017年）的工作为基础，我们提出了一种新型胶囊系统，其中每个胶囊有一个逻辑单元表示实体的存在和4×4姿态矩阵表示该实体的姿态。我们还介绍了一种新的基于EM算法的在胶囊层之间的迭代路由程序，其允许每个较低级胶囊的输出被路由到上层的一个胶囊，使得活性胶囊接收一簇近似的姿势选票。这个新系统在smallNORB数据上比最优的CNN实现了更高的精度，减少了45％的错误量。我们也阐示了它对于白盒对抗性攻击比基准CNN具有显著的抵抗力。SmallNORB是开发新型形状识别模型的理想数据集，因为它恰恰缺乏许多额外干扰性图像特征。现在我们的胶囊模型在NORB上工作得很好，我们计划实施一个高效版本在大得多的数据集如ImageNet上测试更大的模型。
 
 声明：感谢Robert Gens，Eric Langlois，Taco Cohen和有助于讨论的匿名评论员以及每个TensorFlow的创建者。
