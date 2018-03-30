@@ -136,36 +136,21 @@ distances at each routing iteration.
 Instead of using our MDL-derived capsule activation term which computes a separate activation
 probability per capsule, we could view the capsule activations like the mixing proportions in a
 mixture of Gaussians and set them to be proportional to the sum of the assignment probabilities
-of a capsule and to sum to 1 over all the capsules in a layer. This increases the test error rate on
+of a capsule and to sum to 1 over all the capsules in a layer. 
 
-图2 显示了EM路由如何调整投票分配和胶囊均值，以找到选票中的密集群。
-直方图显示投票距离的均值（姿态）分布在路由迭代期间每个分类胶囊。在第一次迭代中，投票之间平均分配5最后一层胶囊。因此，所有胶囊的计算结果都会得到接近0.05的选票意思。在第二次迭代中，同意投票的分配概率增加。因此，大多数选票都被分配到检测到的集群，中间是动物和人类排，而其他胶囊只能得到比计算结果更多的零散投票意思。附录中图2的缩小版显示了投票的完整分配每次路由迭代的距离。而不是使用我们的MDL派生的胶囊激活术语来计算单独的激活每个胶囊的概率，我们可以观察胶囊激活，如a中的混合比例高斯混合，并将它们设置为与分配概率的总和成比例
-的胶囊，并且在一层中的所有胶囊上总计为1。这增加了测试错误率
+This increases the test error rate on
+
+图2 显示了EM路由如何调整投票分配和胶囊均值，以找出选票中的紧致群。
+直方图显示，在路由迭代期间，选票距离每类胶囊均值（姿态）的分布。在第一轮迭代中，投票在5个最后层胶囊之间均等分布。因此，所有胶囊接受到的选票比0.05更接近它们算出的均值。在第二轮迭代中，欢迎投票的分配概率增加。因此，大多数选票都被分配到检测到的集群，中间行的动物和人类，而其他胶囊只接收到零散选票，因其距离计算的均值远离0.05。附录中图2的缩小版出示了，在每轮路由迭代中选票距离的完整分配。而不是使用我们的MDL派生的胶囊激活术语来计算每个胶囊的单独激活概率，我们可以观察胶囊激活，如在一个高斯混合中的混合比例，并将它们设置为与一个胶囊的分配概率总和成比例，并且在一层中的所有胶囊上总计为1。这增加了测试错误率
 
 ![图2](https://github.com/humor250/matrixcapsules/blob/master/pic2_matrixcapsules.png)
-Figure 2: Histogram of distances of votes to the mean of each of the 5 final capsules after each
-routing iteration. Each distance point is weighted by its assignment probability. All three images
-are selected from the smallNORB test set. The routing procedure correctly routes the votes in the
-truck and the human example. The plane example shows a rare failure case of the model where the
-plane is confused with a car in the third routing iteration. The histograms are zoomed-in to visualize
-only votes with distances less than 0.05. Fig. B.2 shows the complete histograms for the ”human”
-capsule without clipping the x-axis or fixing the scale of the y-axis.
 
-图2：投票距离每个胶囊5个胶囊后均值的直方图路由迭代。 每个距离点由其分配概率加权。 所有三个图像是从smallNORB测试集中选择的。 路由程序正确路由中的投票卡车和人的例子。该平面示例显示了一个罕见的模型失败案例飞机在第三次路线迭代中与汽车混淆。直方图被放大以可视化只有距离小于0.05的选票。图B.2显了“人”的完整直方图，胶囊没有剪裁x轴或固定y轴的比例。
+图2：每轮迭代后选票距离到5个最后胶囊的每个均值的直方图。每个距离点由其分配概率加权。所有三个图像是从smallNORB测试集中选出的。在卡车和人类例子中，路由程序正确地路由了选票。飞机例子显示了一个罕见的模型失败的案例，在第三次路线迭代中飞机与汽车混淆。直方图被放大以可视化只有距离小于0.05的选票。图B.2显了“人类”胶囊的完整直方图，没有剪裁x轴或固化y轴的比例。
 
-Table 2: A comparison of the smallNORB test error rate of the baseline CNN and the capsules model
-on novel viewpoints when both models are matched on error rate for familiar viewpoints.
-
-表2：在熟悉视角下两模型误差率相同时，新视角下基线CNN和胶囊模型的smalNORB测试错误率的比较
+表2：在熟悉视角下两模型误差率相同时，在新视角下，基线CNN和胶囊模型的smalNORB测试错误率的比较
 ![表2](https://github.com/humor250/matrixcapsules/blob/master/table2_matrixcapsules.png)
 
-smallNORB to 4.5%. Tab. 1 summarizes the effects of the number of routing iterations, the type of
-loss, and the use of matrices rather than vectors for the poses.
-The same capsules architecture as Fig. 1 achieves 0.44% test error rate on MNIST. If the number
-of channels in the first hidden layer is increased to 256, it achieves 11.9% test error rate on Cifar10
-(Krizhevsky & Hinton (2009)).
-
-smallNORB降至4.5％。 标签.1统计了路由迭代次数的影响，即类型损失，以及使用矩阵而不是向量来表示姿势。与图1相同的胶囊架构在MNIST上达到了0.44％的测试错误率。 如果在第一隐层的通道数量增加到256个，在Cifar10上实现了11.9％的测试错误率（Krizhevsky＆Hinton（2009））。
+smallNORB降至4.5％。标签.1统计了路由迭代次数的影响，即类型损失，以及使用矩阵而不是向量来表示姿态。与图1相同的胶囊架构，在MNIST上达到了0.44％的测试错误率。如果在第一隐层的通道数量增加到256个，在Cifar10上实现了11.9％的测试错误率（Krizhevsky＆Hinton（2009））。
 
 5.1 GENERALIZATION TO NOVEL VIEWPOINTS
 A more severe test of generalization is to use a limited range of viewpoints for training and to test on
@@ -182,7 +167,8 @@ CNN capsules with matched performance on familiar viewpoints reduce the test err
 viewpoints by about 30% for both novel azimuths and novel elevations.
 
 5.1新视角概述
-更严格的总的测试是使用有限范围的观点进行训练和测试范围更广泛。我们对卷积基线和胶囊模型进行了三分之一的训练的训练数据包含方位角（300,320,340,0,20,40），并在三分之二的包含方位角从60到280的测试数据。在另一个实验中，我们对3进行了训练较小的海拔高度和6个较大的海拔高度进行测试。很难决定胶囊模型是否更好地推广到新颖的观点，因为它在所有视点上实现更好的测试准确性。为了消除这个混杂因素，我们停了下来训练胶囊模型时，其性能与基线CNN的三分之一相符测试集使用了培训观点。然后，我们将这些匹配的模型在两三位进行比较具有新颖观点的测试集。结果在Tab.2显示与基线相比,在熟悉的视点上具有匹配性能的CNN胶囊，在新视角，对于新方位角和新高程，减少了约为30％测试错误率。
+更严格的总体测试，是使用有限范围的视角进行训练，和测试范围更宽。我们用三分之一的训练数据包括方位角（300,320,340,0,20,40）对卷积基准和胶囊模型进行训练，并用三分之二测试数据包含方位角从60到280进行测试。在另一个实验中，我们针对3个更小高度进行训练和6个较大的高度进行测试。
+很难确定胶囊模型是否对新视角总体上更好，因为它在所有视角上，实现了更好的测试准确性。为了消除这个混杂因素，在第三测试集用于训练视点时，胶囊模型的性能与基准CNN匹配，我们停止训练。然后，我们比较在三分之二测试集上的匹配模型与新视角。表2的结果表明，与基线相比，在熟悉视角上性能匹配的胶囊，在新视角上，对于新方位角和新高程，均减少了约为30％测试错误率。
 
 6 ADVERSARIAL ROBUSTNESS
 There is growing interest in the vulnerability of neural networks to adversarial examples; inputs
@@ -209,59 +195,17 @@ Method (Kurakin et al. (2016)), which is simply the aforementioned attack except
 smaller steps when creating the adversarial image. Here too we find that our model is much more
 robust to the attack than the traditional convolutional model.
 
-6 抵御的鲁棒性
-人们越来越感兴趣的是神经网络对敌对的例子。输入
-攻击者已经稍微改变了这一点，以欺骗神经网络分类器制造错误
-分类。这些输入可以通过各种方式创建，但直接的策略如
-FGSM（Goodfellow et al。（2014））已经显示大大降低了卷积的准确性
-神经网络对图像分类任务。我们比较我们的胶囊模型和传统模型
-卷积模型对其抵御这种攻击的能力。
-FGSM计算损失w.r.t的梯度。每个像素的亮度然后改变像素
-强度按固定量计算？在增加损失的方向上。所以这些变化只依赖于
-每个像素处渐变的符号。这可以通过更新输入扩展到有针对性的攻击
-以最大化特定错误类别的分类概率。我们产生了敌对情绪
-使用FGSM的攻击，因为它只有一个超参数，并且很容易比较模型
-它们具有非常不同的梯度大小。为了测试我们的模型的鲁棒性，我们生成了
-使用完全训练的模型从测试集中获得敌对图像。然后我们报告了准确性
-这些图像上的模型。
-我们发现我们的模型对于普通和有针对性的FGSM敌手都不那么脆弱
-攻击;一个小的 ？可以用来减少卷积模型的精度远远超过一个
-相当于？可以在胶囊模型上（图3）。还应该指出，胶囊模型的准确性
-在非目标攻击之后永远不会低于机会（20％）而卷积模型
-准确性被降低到显着低于一个？小到0.2。
-我们还测试了我们的基础迭代稍微复杂的敌对攻击模型
-方法（Kurakin et al。（2016）），这只是上述攻击，除了它需要多次
-创建敌对图片时步幅较小。我们也发现我们的模型更多
-比传统的卷积模型更能抵御攻击。
+6 对抗鲁棒性
+人们对神经网络在对抗样本时的脆弱性越来越感兴趣。攻击者稍微改变的输入就会欺骗神经网络分类器制造错误分类。这些输入可以通过各种方式创建，但直接的策略如FGSM（Goodfellow et al.（2014））已经显示大大降低了卷积神经网络执行图像分类任务的准确性。我们比较胶囊模型和传统卷积模型抵御这种攻击的能力。FGSM计算损失w.r.t的梯度，每个像素强度，然后通过固定值$\epsilon$在提高损失的方向上改变像素强度。这样，这些变化只依赖于每个像素渐变的信号。这可以扩展到成一个针对性的攻击，方法是通过更新输入来最大化一个特定错误类别的分类概率。我们使用FGSM生成一个对抗攻击，因为它只有一个超参数，并且很容易比较具有非常不同梯度大小的模型。
+
+为了测试模型的鲁棒性，我们用完全训练的模型从测试集中生成对抗图片。然后我们有了这些图片的模型准确性报告。我们发现我们的模型对于普通和有针对性的FGSM攻击，明显地都不那么脆弱；一个小的$\epsilon$可以减少卷积模型的精度远远超过一个相同$\epsilon$在胶囊模型上的作用（图3）。还应该指出，胶囊模型的准确性在非针对性攻击后，绝不会降到（20％）以下几率；而卷积模型准确性会明显地因为$\epsilon$而低到其几率小到0.2。我们还测试了稍微复杂的对抗攻击，即基本迭代方法（Kurakin et al.（2016）），其就是上述攻击，只是创建攻击图片时采取多个更小步骤。这也表明我们的模型比传统的卷积模型具有强得多的抗击力。
 
 ![图3](https://github.com/humor250/matrixcapsules/blob/master/pic3_matrixcapsules.png)
 
-Figure 3: Accuracy against  after an adversarial attack (left) and Success Rate after a targeted
-adversarial attack (right). The targeted attack results were evaluated by averaging the success rate
-after the attack for each of the 5 possible classes.
 图3：对抗攻击（左）后的$\epsilon$准确性和目标攻击（右）后的成功率。目标攻击结果，是对5个可能种类的每一个的攻击后，通过平均成功率进行评估。
 
-It has been shown that some robustness to adversarial attacks in models can be due to simple numerical
-instability in the calculation of the gradient Brendel & Bethge (2017). To ensure that this
-was not the sole cause of our model’s robustness, we calculated the percentage of zero values in the
-gradient with respect to the image in the capsule model and found it to be smaller than that of the
-CNN. Furthermore, the capsule gradients, although smaller that those of the CNN, are only smaller
-by 2 orders of magnitude, as opposed to 16 orders of magnitude seen in Brendel & Bethge (2017)’s
-work.
-Finally we tested our model’s robustness to black box attacks by generating adversarial examples
-with a CNN and testing them on both our capsule model and a different CNN. We found that the
-capsule model did not perform noticeably better at this task than the CNN.
-
-已经表明，模型中对抗攻击的一些鲁棒性可能归因于简单的数值
-计算梯度Brendel＆Bethge（2017）的不稳定性。为了确保这一点
-并不是我们模型稳健性的唯一原因，我们计算了零值的百分比
-相对于胶囊模型中的图像的梯度，并且发现其小于
-CNN。此外，胶囊梯度虽然小于CNN，但只有较小的梯度
-增加2个数量级，而Brendel＆Bethge（2017）的数据则为16个数量级
-工作。
-最后，我们通过生成敌对的例子来测试我们的模型对黑匣子攻击的鲁棒性
-与CNN并在我们的胶囊模型和不同的CNN上测试它们。我们发现了
-胶囊模型在这项任务上的表现并不比CNN好得多。
+已经表明，模型中对抗攻击的一些鲁棒性可能由于在梯度Brendel＆Bethge（2017）计算中简单数字的不稳定性。为了确保这不是我们模型稳健性的唯一原因，针对胶囊模型中的图像，我们计算了梯度中零值的百分比，并且发现其小于CNN。此外，胶囊梯度虽然小于CNN，但只小了2个数量级，而不是在Brendel＆Bethge（2017）的工作所见的16个数量级。
+最后，我们测试我们模型对黑匣子攻击的鲁棒性。通过用一个CNN生成对抗样本，并在胶囊模型和不同的CNN上测试它们。我们发现，胶囊模型在这项任务上的表现并不比CNN好得多。
 
 7 RELATED WORK
 Among the multiple recent attempts at improving the ability of neural networks to deal with viewpoint
