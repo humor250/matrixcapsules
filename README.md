@@ -242,7 +242,7 @@ maximal response and orientation using complex numbers.
 CNN的成功激发了许多研究人员扩展针对CNN所内建的同变性，以包容旋转同变性（Cohen＆Welling（2016），Dieleman等（2016），
 Oyallon＆Mallat（2015））。 
 
-Harmonic Networks最近进展是（Worrall et al。（2017））通过使用圆谐波滤波器和用复杂数字返回最大响应和方向实现旋转同变特征映射。
+Harmonic Networks最近进展是（Worrall et al。（2017））通过使用圆谐波滤波器和用复杂数字返回最大响应和方向实现旋转同变特征映射（Feature Map）。
 
 This shares the basic representational
 idea of capsules: By assuming that there is only one instance of the entity at a location, we can
@@ -255,7 +255,7 @@ rotations. Symmetry networks (Gens & Domingos (2014)) use iterative Lucas-Kanade
 to find poses that are supported by the most low-level features. Their key weakness is that the
 iterative algorithm always starts at the same pose, rather than the mean of the bottom-up votes.
 
-这分享基本上代表了胶囊网络的想法：假设一个位置只有一个实体实例，我们可以使用几个不同的数字来表示它的属性。他们使用固定数量流的旋转次序。通过沿着任何路径执行旋转次序总和等式，他们实现补丁式旋转同变性。这种方法比数据增强更具参数效率方法，复制特征地图或复制过滤器（Fasel＆Gatica-Perez（2006），Laptev等人。 （2016））。我们的目标编码一般视点同变性而不是仅仿射二维旋转。对称网络（Gens＆Domingos（2014））使用迭代Lucas-Kanade优化找到最低级特征支持的姿态。他们的关键弱点是，迭代算法总是始于相同的姿势，而不是自下而上选票的均值。
+这里分享基本的具有代表性的胶囊网络的思想：假设一个位置只有一个实体实例，我们可以使用几个不同的数字来表示它的属性。他们使用固定数量流的旋转次序。通过沿着任何路径执行旋转次序总和等式，他们实现补丁式旋转同变性。这种方法比数据增强更具参数效率方法，复制特征地图或复制过滤器（Fasel＆Gatica-Perez（2006），Laptev等人（2016））。我们的目标编码一般视点同变性而不是仅仿射二维旋转。对称网络（Gens＆Domingos（2014））使用迭代Lucas-Kanade优化找到最低级特征支持的姿态。他们的关键弱点是，迭代算法总是始于相同的姿势，而不是自下而上选票的均值。
 
 Lenc & Vedaldi (2016) proposes a feature detection mechanism (DetNet) that is equivariant to affine
 transformations. DetNet is designed to detect the same points in the image under different viewpoint
