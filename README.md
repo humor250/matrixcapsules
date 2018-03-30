@@ -272,7 +272,7 @@ a higher-level capsule might attend to. It is between the higher-level capsules 
 capsule might send its vote to.
 
 Lenc和Vedaldi（2016）提出了一个与仿射同变的特征检测机制（DetNet）。DetNet旨在检测不同视点变化下的图像的相同点。这项工作与我们的工作是正交的，但DetNet可能是实现解除渲染的第一阶段，即激活主胶囊层这项工作的一个好方法。我们的路由算法可以被看作是一种关注机制。在这个观点上，它与Gregor et al. (2015)等人的工作相关，通过使用高斯内核参与由编码器生成的特征映射的不同部分，他们改进了一个生成模型的解码器性能。Vaswani
-et al. (2017)使用softmax关注机制，针对翻译任务和为查询而生成编码时，将查询序列部分与输入序列部分进行匹配。他们使用循环架构显示出对以前翻译工作的改进。我们的算法关注在相反的方向。竞争不在一个高级的胶囊可能会参加的低级胶囊之间，而在一个低级胶囊可能会将其选票发送到的高级胶囊之间。
+et al. (2017)使用softmax关注机制，针对翻译任务和为查询生成编码时，将查询序列部分与输入序列部分进行匹配。他们使用循环架构显示出对以前翻译工作的改进。我们的算法关注在相反的方向。竞争不在一个高级胶囊可能参加的低级胶囊之间，而在一个低级胶囊可能会将其选票发给的高级胶囊之间。
 
 7.1 PREVIOUS WORK ON CAPSULES
 Hinton et al. (2011) used a transformation matrix in a transforming autoencoder that learned to
@@ -291,15 +291,13 @@ insensitive to the difference between a quite good agreement and a very good agr
 transformation matrices have n
 2 parameters rather than just n.
 
-7.1胶囊网络的前期工作
+7.1 胶囊网络的前期工作
 
 Hinton等人（2011）在一个变换自编码器中使用了一个变换矩阵，自解码器知道如何将一对立体图像转换为略微不同视点的立体对。然而，该系统需要从外部提供变换矩阵。最近，协议路由被证明对分割高度重叠的数字是有效的（Sabour等（2017）），但是这个系统有几个缺陷，我们在本文中已经解决了这个问题：
 
 1. 它使用姿态向量的长度，来表示由一个胶囊表示的实体存在的概率。要保持长度小于1，需要一个无原则的非线性，并且这可以防止任何由迭代路由程序最小化的明智的目标函数的存在。
-
 2. 它使用两个姿态矢量夹角的余弦来衡量它们的一致性。不像高斯簇的负对数方差，余弦在1处饱和，这会使它对相当好的协议和非常好的协议的区别不敏感。
-
-3. 它用一个长度为n的矢量，而不是一个有n个元素的矩阵来表示一个姿势，所以它是变换矩阵有$n^2$个参数而不仅仅是n。
+3. 它用一个长度为n的矢量，而不是一个有n个元素的矩阵来表示一个姿势，所以它的变换矩阵有$n^2$个参数而不仅仅是n。
 
 8 CONCLUSION
 Building on the work of Sabour et al. (2017), we have proposed a new type of capsule system in
@@ -320,4 +318,4 @@ commentators for helpful discussions and to everyone who made TensorFlow.
 8 结论
 以Sabour等人（2017年）的工作为基础，我们提出了一种新型胶囊系统，其中每个胶囊有一个逻辑单元表示实体的存在和4×4姿态矩阵表示该实体的姿态。我们还介绍了一种新的基于EM算法的在胶囊层之间的迭代路由程序，其允许每个较低级胶囊的输出被路由到上层的一个胶囊，使得活性胶囊接收一簇近似的姿势选票。这个新系统在smallNORB数据上比最优的CNN实现了更高的精度，减少了45％的错误量。我们也阐示了它对于白盒对抗性攻击比基准CNN具有显著的抵抗力。SmallNORB是开发新型形状识别模型的理想数据集，因为它恰恰缺乏许多额外干扰性图像特征。现在我们的胶囊模型在NORB上工作得很好，我们计划实施一个高效版本在大得多的数据集如ImageNet上测试更大的模型。
 
-致谢：感谢Robert Gens，Eric Langlois，Taco Cohen和有助于讨论的匿名评论员以及每个TensorFlow的创建者。
+声明：感谢Robert Gens，Eric Langlois，Taco Cohen和有助于讨论的匿名评论员以及每个TensorFlow的创建者。
