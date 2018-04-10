@@ -93,20 +93,9 @@ B=32主胶囊类型的每个胶囊的4x4姿态是一个习得的所有的低层�
 路由程序在每对相邻的胶囊层之间使用。对于卷积胶囊，L+1层的每个胶囊只将反馈发送到L层中其接受域内的胶囊。因此，L层的一个胶囊的每个卷积实例以最大核尺寸X接收来自L+1层的每个胶囊类型的核尺寸反馈。越接近图像边界的实例接收较少的反馈，如角落实例接收仅一个来自L+1层的一个反馈。
 
 ### 4.1 SPREAD LOSS传播损失
-In order to make the training less sensitive to the initialization and hyper-parameters of the model,
-we use “spread loss” to directly maximize the gap between the activation of the target class (at) and
-the activation of the other classes. If the activation of a wrong class, ai
-, is closer than the margin,
-m, to at then it is penalized by the squared distance to the margin:
-$Li = (max(0, m − (a_t − a_i))^2, L =\sum_{i \neq t}L_i (3)$
-By starting with a small margin of 0.2 and linearly increasing it during training to 0.9, we avoid
-dead capsules in the earlier layers. Spread loss is equivalent to squared Hinge loss with m = 1.
-Guermeur & Monfrini (2011) studies a variant of this loss in the context of multi class SVMs.
-
 为了降低训练对模型的初始参数和超参数敏感度，我们使用“传播损失”来直接最大化目标类（$a_t$）激活和其他类激活之间的间距。如果错误类别$a_i$的激活比对$a_t$余量m更近，那么它的罚额是距离平方：$$L_i = (max(0, m − (a_t − a_i))^2, L =\sum_{i \neq t}L_i (3)$$ 从0.2的小幅度开始，在训练过程中将其线性增加到0.9，我们避免了早期层中的死胶囊。传播损失相当于m = 1时的Hinge损失值的平方。Guermeur＆Monfrini（ 2011）研究了在多类SVM背景下这种损失的一个变体。
 
 ### 5 实验
-
 smallNORB数据集（LeCun et al.（2004））有5种玩具的灰度立体图像：飞机，汽车，卡车，人类和动物，每种有10个涂哑光绿色的物理实例。每种的5个物理实例为训练数据，另外5个为测试数据。每个玩具都有18个不同的方位角（0-340），9个高度和6种光照条件，所以训练和测试数据集均包含24,300个96x96图像的立体对。我们选择smallNORB作为开发胶囊系统的基准，因为它是专为一种纯粹的图形识别任务而进行的细致设计，不受上下文和颜色干扰，但它比MNIST更接近自然图像。
 
 表1：我们的胶囊架构的不同组件对smallNORB的影响。
@@ -121,25 +110,6 @@ smallNORB数据集（LeCun et al.（2004））有5种玩具的灰度立体图像
 非线性算法。对CNN基准，我们准备了上述对胶囊网络相同的图片。我们的基准CNN是广泛的超参搜索（过滤器大小，通道数量和学习率）的结果。
 CNN基准在smallNORB上达到5.2％的测试错误率，有4.2M参数量。我们推断Ciresfort等人（2011）网络拥有2.7M参数。通过使用小矩阵乘法，与基准CNN相比，我们将参数数量减少了15到310K（和Ciresfort等人（2011）的9倍因子）。 一个只有68K可训练参数的A=64，B=8，C=D=16的小胶囊网络，达到了2.2％的测试错误率，这也击败了之前的最优的测试错误率。
 
-Fig. 2 shows how EM routing adjusts the vote assignments and the capsule means to find the tight
-clusters in the votes. 
-The histograms show the distribution of vote distances to the mean (pose) of
-each class capsule during routing iterations. 
-
-At the first iteration, votes are distributed equally between
-5 final layer capsules. Therefore, all capsules receive votes closer than 0.05 to their calculated
-mean. In the second iteration, the assignment probability for agreeing votes increases. Therefore,
-most of the votes are assigned to the detected clusters, the animal and human class in the middle
-row, and the other capsules only receive scattered votes which are further than 0.05 from the calculated
-mean. The zoomed-out version of Fig. 2 in the Appendix shows the full distribution of vote
-distances at each routing iteration.
-Instead of using our MDL-derived capsule activation term which computes a separate activation
-probability per capsule, we could view the capsule activations like the mixing proportions in a
-mixture of Gaussians and set them to be proportional to the sum of the assignment probabilities
-of a capsule and to sum to 1 over all the capsules in a layer. 
-
-This increases the test error rate on
-
 图2 显示了EM路由如何调整投票分配和胶囊均值，以找出选票中的紧致群。
 直方图显示，在路由迭代期间，选票距离每类胶囊均值（姿态）的分布。在第一轮迭代中，投票在5个最后层胶囊之间均等分布。因此，所有胶囊接受到的选票比0.05更接近它们算出的均值。在第二轮迭代中，欢迎投票的分配概率增加。因此，大多数选票都被分配到检测到的集群，中间行的动物和人类，而其他胶囊只接收到零散选票，因其距离计算的均值远离0.05。附录中图2的缩小版出示了，在每轮路由迭代中选票距离的完整分配。而不是使用我们的MDL派生的胶囊激活术语来计算每个胶囊的单独激活概率，我们可以观察胶囊激活，如在一个高斯混合中的混合比例，并将它们设置为与一个胶囊的分配概率总和成比例，并且在一层中的所有胶囊上总计为1。这增加了测试错误率
 
@@ -152,48 +122,9 @@ This increases the test error rate on
 
 smallNORB降至4.5％。标签.1统计了路由迭代次数的影响，即类型损失，以及使用矩阵而不是向量来表示姿态。与图1相同的胶囊架构，在MNIST上达到了0.44％的测试错误率。如果在第一隐层的通道数量增加到256个，在Cifar10上实现了11.9％的测试错误率（Krizhevsky＆Hinton（2009））。
 
-5.1 GENERALIZATION TO NOVEL VIEWPOINTS
-A more severe test of generalization is to use a limited range of viewpoints for training and to test on
-a much wider range. We trained both our convolutional baseline and our capsule model on one-third
-of the training data containing azimuths of (300, 320, 340, 0, 20, 40) and tested on the two-thirds of
-the test data that contained azimuths from 60 to 280. In a separate experiment, we trained on the 3
-smaller elevations and tested on the 6 larger elevations.
-It is hard to decide if the capsules model is better at generalizing to novel viewpoints because it
-achieves better test accuracy on all viewpoints. To eliminate this confounding factor, we stopped
-training the capsule model when its performance matched the baseline CNN on the third of the
-test set that used the training viewpoints. Then, we compared these matched models on the twothirds
-of the test set with novel viewpoints. Results in Tab. 2 show that compared with the baseline
-CNN capsules with matched performance on familiar viewpoints reduce the test error rate on novel
-viewpoints by about 30% for both novel azimuths and novel elevations.
-
 ### 5.1 新视角概述
 更严格的总体测试，是使用有限范围的视角进行训练，和测试范围更宽。我们用三分之一的训练数据包括方位角（300,320,340,0,20,40）对卷积基准和胶囊模型进行训练，并用三分之二测试数据包含方位角从60到280进行测试。在另一个实验中，我们针对3个更小高度进行训练和6个较大的高度进行测试。
 很难确定胶囊模型是否对新视角总体上更好，因为它在所有视角上，实现了更好的测试准确性。为了消除这个混杂因素，在第三测试集用于训练视点时，胶囊模型的性能与基准CNN匹配，我们停止训练。然后，我们比较在三分之二测试集上的匹配模型与新视角。表2的结果表明，与基线相比，在熟悉视角上性能匹配的胶囊，在新视角上，对于新方位角和新高程，均减少了约为30％测试错误率。
-
-6 ADVERSARIAL ROBUSTNESS
-There is growing interest in the vulnerability of neural networks to adversarial examples; inputs
-that have been slightly changed by an attacker to trick a neural net classifier into making the wrong
-classification. These inputs can be created in a variety of ways, but straightforward strategies such as
-FGSM (Goodfellow et al. (2014)) have been shown to drastically decrease accuracy in convolutional
-neural networks on image classification tasks. We compare our capsule model and a traditional
-convolutional model on their ability to withstand such attacks.
-FGSM computes the gradient of the loss w.r.t. each pixel intensity and then changes the pixel
-intensity by a fixed amount  in the direction that increases the loss. So the changes only depend on
-the sign of the gradient at each pixel. This can be extended to a targeted attack by updating the input
-to maximize the classification probability of a particular wrong class. We generated adversarial
-attacks using FGSM because it has only one hyper-parameter and it is easy to compare models
-that have very different gradient magnitudes. To test the robustness of our model, we generated
-adversarial images from the test set using a fully trained model. We then reported the accuracy of
-the model on these images.
-We found that our model is significantly less vulnerable to both general and targeted FGSM adversarial
-attacks; a small  can be used to reduce a convolutional model’s accuracy much more than an
-equivalent  can on the capsule model (Fig. 3). It should also be noted that the capsule model’s accuracy
-after the untargeted attack never drops below chance (20%) whereas the convolutional model’s
-accuracy is reduced to significantly below chance with an  as small as 0.2.
-We also tested our model on the slightly more sophisticated adversarial attack of the Basic Iterative
-Method (Kurakin et al. (2016)), which is simply the aforementioned attack except it takes multiple
-smaller steps when creating the adversarial image. Here too we find that our model is much more
-robust to the attack than the traditional convolutional model.
 
 ### 6 对抗鲁棒性
 人们对神经网络在对抗样本时的脆弱性越来越感兴趣。攻击者稍微改变的输入就会欺骗神经网络分类器制造错误分类。这些输入可以通过各种方式创建，但直接的策略如FGSM（Goodfellow et al.（2014））已经显示大大降低了卷积神经网络执行图像分类任务的准确性。我们比较胶囊模型和传统卷积模型抵御这种攻击的能力。FGSM计算损失w.r.t的梯度，每个像素强度，然后通过固定值$\epsilon$在提高损失的方向上改变像素强度。这样，这些变化只依赖于每个像素渐变的信号。这可以扩展到成一个针对性的攻击，方法是通过更新输入来最大化一个特定错误类别的分类概率。我们使用FGSM生成一个对抗攻击，因为它只有一个超参数，并且很容易比较具有非常不同梯度大小的模型。
@@ -207,7 +138,7 @@ robust to the attack than the traditional convolutional model.
 已经表明，模型中对抗攻击的一些鲁棒性可能由于在梯度Brendel＆Bethge（2017）计算中简单数字的不稳定性。为了确保这不是我们模型稳健性的唯一原因，针对胶囊模型中的图像，我们计算了梯度中零值的百分比，并且发现其小于CNN。此外，胶囊梯度虽然小于CNN，但只小了2个数量级，而不是在Brendel＆Bethge（2017）的工作所见的16个数量级。
 最后，我们测试我们模型对黑匣子攻击的鲁棒性。通过用一个CNN生成对抗样本，并在胶囊模型和不同的CNN上测试它们。我们发现，胶囊模型在这项任务上的表现并不比CNN好得多。
 
-7 RELATED WORK相关工作
+### 7 相关工作
 Among the multiple recent attempts at improving the ability of neural networks to deal with viewpoint
 variations, there are two main streams. One stream attempts to achieve viewpoint invariance
 and the other aims for viewpoint equivariance. The work presented by Jaderberg et al. (2015)), Spatial
