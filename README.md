@@ -172,7 +172,7 @@ softmax函数用来计算在logits被视为负能量时最小化自由能的分�
 目标函数最小化方程式4，其中包括：
 •MDL成本$-βa$按层$L + 1（aj，j∈ΩL+ 1）$中胶囊存在的概率进行计算。
 •激活的负熵$a_j，j∈Ω_{L+ 1}$。
-•在M步骤中最小化的预期能：加权的对数概率（costhj）的总和。
+•在M步骤中最小化的预期能：加权的对数概率（$cost^h_j$）的总和。
 •由数据点（$ai，i∈Ω_L$）存在的概率计算的路由softmax分配（$Rij$）的负熵。
 
 #### A.2修改1：变换的高斯混合
@@ -193,13 +193,12 @@ softmax函数用来计算在logits被视为负能量时最小化自由能的分�
 在上面的一些解释中，我们暗含地假定低级胶囊具有1或0的活动，而且在动态路由期间计算的分配概率也是1或0。事实上，这些数字都是概率，并且，我们使用这两个概率的乘积作为每个低阶均值的基线描述长度，及其通过利用高级胶囊拟合的高斯得到的替代值的描述长度。
 
 ![图B.1](https://github.com/humor250/matrixcapsules/blob/master/b1_matrixcapsules.png)
-
 图B.1：在不同视点处的样本smallNORB图像。第一行的所有图像都是方位角0和高程0.第二行显示一组在更高程和不同方位角的图像。
 
 ![图B.2](https://github.com/humor250/matrixcapsules/blob/master/b2_matrixcapsules.png)
-
 图B.2：在接收的选票与5个最终胶囊的每个中心之间距离的对数比例直方图。这三行显示迭代1,2和3的5个直方图。与图2不同，直方图独立记录缩放，以便可以看到大小的计数。 还有，考量的距离范围设为60，并且箱的数量要大得多。
 
+图B.3：在CNN模型和Capsule模型中使用FGSM当$\epsilon$=0.1和$\epsilon$=0.4时生成的对抗图像。
 ![图B.3](https://github.com/humor250/matrixcapsules/blob/master/b3_matrixcapsules.png)
 
-图B.3：在CNN模型和Capsule模型中使用FGSM当$\epsilon$=0.1和$\epsilon$=0.4时生成的对抗图像。
+
