@@ -63,7 +63,7 @@ return $a, M$
 
 5: $cost^h ←\bigl(βu + log(σ^h_j)\bigr)\sum_i R_{ij}$
 
-6: $a_j ← logistic(λ(β_a −\sum_hcost^h))$
+6: $a_j ← logistic(λ(β_a −\sum_hcost^h_j))$
 
 
 1: **procedure** E-STEP(µ, σ, a, V , i) . 》for one lower-level capsule, i
